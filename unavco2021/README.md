@@ -39,7 +39,7 @@ WSL 2 is a paired down version of Linux running on Windows 10+.
 
 # Change to the Directory Holding build_start_unavco_container.sh
 
-- run `cd opensarlab-docker`
+- run `cd opensarlab-docker/unavco2021`
 
 # Add Any Additional Files You Wish to Access From Your Container
 
@@ -47,7 +47,7 @@ WSL 2 is a paired down version of Linux running on Windows 10+.
 
 # Run build_start_unavco_container.sh
 
-- run `bash build_start_unavco_container.sh 2>&1 | tee log`
+- run `bash build_start_unavco_container.sh 2>&1 | tee log` in the terminal
 - Note that we direct output to a log file
     - If your image build or container run fails, please send this log file when you reach out for support
 
@@ -70,7 +70,8 @@ WSL 2 is a paired down version of Linux running on Windows 10+.
 # Run the Container Again
 
 - run `bash build_start_unavco_container.sh 2>&1 | tee log` again any time you wish to rerun the container
-    - This will check for updates to the unavco conda environment every time you rerun the container  
+    - This will check for updates to the unavco conda environment every time you rerun the container
+    - If the docker image is not deleted or modified, a cached version will run.
     
 # If You Encounter Issues
 
