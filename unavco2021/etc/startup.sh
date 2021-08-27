@@ -37,8 +37,6 @@ cp "${UNAVCO_FILES}"/00-df.py $HOME/.ipython/image_default/startup/00-df.py
 
 # Pull in any repos you would like cloned to user volumes
 gitpuller https://github.com/parosen/Geo-SInC.git main $HOME/Geo-SInC
-#gitpuller https://github.com/asfopensarlab/opensarlab-notebooks.git master $HOME/notebooks
-#gitpuller https://github.com/asfopensarlab/opensarlab-envs.git main $HOME/conda_environments
 
 CONDARC=$HOME/.condarc
 if ! test -f "$CONDARC"; then

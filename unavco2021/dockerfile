@@ -2,7 +2,7 @@ FROM jupyter/base-notebook:latest
 
 LABEL organization="Alaska Satellite Facility"
 LABEL author="Alex Lewandowski, Rui Kawahara, & Eric Lundell"
-LABEL date="2021-08-25"
+LABEL creation_date="2021-08-27"
 
 USER root
 
@@ -53,11 +53,6 @@ RUN cp /usr/lib/x86_64-linux-gnu/libgeotiff.so.5 /usr/lib/x86_64-linux-gnu/libge
       kernda \
       nb_conda_kernels
 
-#COPY unavco.yml ${UNAVCO_FILES}/unavco.yml
-#RUN conda env create -f ${UNAVCO_FILES}/unavco.yml
-
-#RUN conda pack -n "$NAME" -o /opt/conda/envs/unavco.tar.gz && \
-#  conda env remove -n unavco && \
 RUN chmod -R 777 /etc/unavco/
 
 COPY etc/pull.py ${UNAVCO_FILES}/pull.py
