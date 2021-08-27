@@ -10,6 +10,5 @@
 !etc/
 !etc/**
 !README.md
-!img
 !img/
-# !jupyter_url.png
+!img/**
