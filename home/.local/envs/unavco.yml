@@ -1,0 +1,51 @@
+name: unavco
+channels:
+  - conda-forge
+  - pyrocko
+  - defaults
+dependencies:
+  - python>=3.6,<3.9
+  - jupyter
+  - kernda
+  - isce2
+  - pip
+  - cartopy
+  - cvxopt
+  - dask>=1.0
+  - dask-jobqueue>=0.3
+  - defusedxml
+  - h5py<3
+  - lxml
+  - matplotlib
+  - numpy
+  - pyproj
+  - scikit-image
+  - scipy
+  - boto3
+  - joblib
+  - shapely
+  - hyp3lib=1.4.1
+  - cython
+  - utm
+  - pyrocko
+  # pyaps dependencies
+  - cdsapi
+  - ecCodes
+  - netcdf4
+  - pygrib
+  - pyhdf
+  # pyresample dependencies
+  - pyresample
+  - openmp
+  - pykdtree
+  - xarray
+  - zarr
+  - pv
+  - pip:
+    - git+https://github.com/insarlab/PySolid.git
+    - git+https://github.com/tylere/pykml.git
+    - git+https://github.com/pyrocko/kite
+    - okada_wrapper
+    - asf_hyp3
+    - hyp3-sdk~=1.0
+    - ipynb
