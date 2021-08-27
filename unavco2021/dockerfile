@@ -1,4 +1,4 @@
-FROM jupyter/base-notebook:latest
+FROM jupyter/base-notebook@sha256:8635b39569cddecf2fac3d95ffe7777d007153e46d47a5dc873357d7cb2d5478
 
 LABEL organization="Alaska Satellite Facility"
 LABEL author="Alex Lewandowski, Rui Kawahara, & Eric Lundell"
