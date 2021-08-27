@@ -55,7 +55,7 @@ WSL 2 is a paired down version of Linux running on Windows 10+.
 
 - After successfully running the container, you will see some URLs in your terminal
 
-![Image showing jupyter url to open](jupyter_url.png)
+![Image showing jupyter url to open](img/jupyter_url.png)
 
 - Open the bottom URL in your browser
 - Do your work
@@ -66,6 +66,12 @@ WSL 2 is a paired down version of Linux running on Windows 10+.
 - In the terminal running your container and Jupyter Server
     - In Linux and Windows, type `Ctrl + c` twice
     - In Mac OS, type `control + c` twice 
+
+**NOTE:** If you are using WSL 2 (i.e. Windows), your terminal will let you close the terminal that is running container without any warning. If this happens, you cannot use `ctrl + c` to stop the container. In such cases, following steps should lets you stop the container:
+
+1. Use `docker ps` to check if container is running. If it is, copy the `CONTAINER ID`. ![docker_ps](./img/docker_ps.PNG)
+1. Use `docker container stop <CONTAINER ID>` to stop your container. You should see your `CONTAINER ID` prompted when container stops. ![docker_stop](./img/docker_stop.PNG)
+
     
 # Run the Container Again
 
