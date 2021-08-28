@@ -84,4 +84,4 @@ WSL 2 is a paired down version of Linux running on Windows 10+.
 # If You Encounter Issues
 
 - Please reach out for support
-- Support contact: uaf-jupyterhub-asf@alaska.edu
+- Support contact: uaf-jupyterhub-asf+unavco@alaska.edu
