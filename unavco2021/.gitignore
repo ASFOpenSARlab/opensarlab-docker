@@ -1,0 +1,14 @@
+**
+!home
+!home/.local
+!home/.local/envs
+!home/.local/envs/unavco.yml
+!build_start_unavco_container.sh
+!dockerfile
+!.gitignore
+!.dockerignore
+!etc/
+!etc/**
+!README.md
+!img/
+!img/**
