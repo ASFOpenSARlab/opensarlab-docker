@@ -11,8 +11,6 @@ NAME=unavco
 SITE_PACKAGES="$LOCAL/envs/$NAME/lib/python3.8/site-packages"
 ##############################################################
 
-#conda run -n "$NAME" kernda --display-name $NAME $LOCAL/envs/$NAME/share/jupyter/kernels/python3/kernel.json -o
-
 pythonpath="$PYTHONPATH"
 path="$PATH"
 

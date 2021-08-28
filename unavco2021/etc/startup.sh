@@ -12,7 +12,6 @@ pip install --user \
 
 # copy over our version of pull.py
 # REMINDER: REMOVE IF CHANGES ARE MERGED TO NBGITPULLER
-
 python=$(python --version 2>&1)
 v=$(echo $python | cut -d'.' -f 2)
 cp "${UNAVCO_FILES}"/pull.py /home/jovyan/.local/lib/python3."$v"/site-packages/nbgitpuller/pull.py
