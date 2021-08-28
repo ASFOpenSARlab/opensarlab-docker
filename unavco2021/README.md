@@ -35,7 +35,7 @@ WSL 2 is a paired down version of Linux running on Windows 10+.
 # Clone the Git Repository to Your Computer
 
 - Open a terminal (WSL 2 if on Windows)
-- run `git clone git@github.com:ASFOpenSARlab/opensarlab-docker.git`
+- run `git clone https://github.com/ASFOpenSARlab/opensarlab-docker.git`
 
 # Change to the Directory Holding build_start_unavco_container.sh
 
