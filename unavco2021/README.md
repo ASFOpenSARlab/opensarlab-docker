@@ -34,8 +34,26 @@ WSL 2 is a paired down version of Linux running on Windows 10+.
 
 # Clone the Git Repository to Your Computer
 
-- Open a terminal (WSL 2 if on Windows)
-- run `git clone git@github.com:ASFOpenSARlab/opensarlab-docker.git`
+- If you are using Windows:
+    - Open WSL2 terminal
+    - Move to your Linux home directory using `cd ~/`
+        - Run `pwd` to check that you are in `/home/<username>/`. At a minimum, make sure you don't have `/mnt/c/` when you use `pwd`.
+        - If you wish to use VS Code within WSL2, [follow the instructions on official documentation](https://code.visualstudio.com/docs/remote/wsl).
+    - Once you are in Linux side of WSL, run `git clone git@github.com:ASFOpenSARlab/opensarlab-docker.git` to clone the repo.
+
+<!--  leave multiple option in case there is alternative -->
+- If you are using Mac OSX (documentation in progress):
+    - Configure your Mac OSX so that the file system is case-sensitive (e.g. directory `a` and `A` should be able to coexist).
+        <!-- - [Use tool such as Carbon Copy Cleaner](https://apple.stackexchange.com/questions/112772/how-do-i-set-my-hd-to-be-case-sensitive). Make sure to backup your system first. -->
+    - Open your terminal
+    - run `git clone git@github.com:ASFOpenSARlab/opensarlab-docker.git`
+
+- If you are using Ubuntu:
+    - Open your terminal
+    - run `git clone git@github.com:ASFOpenSARlab/opensarlab-docker.git`
+
+### **WARNING** - Windows (WSL) and Mac OSX file systems are **case-insensitive** by default, which will cause an issue if not handled properly.
+<br />
 
 # Change to the Directory Holding build_start_unavco_container.sh
 
