@@ -59,6 +59,7 @@ COPY etc/pull.py ${UNAVCO_FILES}/pull.py
 COPY etc/startup.sh ${UNAVCO_FILES}/startup.sh
 COPY etc/install_unavco_pkgs.sh ${UNAVCO_FILES}/install_unavco_pkgs.sh
 COPY etc/00-df.py ${UNAVCO_FILES}/00-df.py
+COPY etc/unavco.yml ${UNAVCO_FILES}/unavco.yml
 
 USER jovyan
 

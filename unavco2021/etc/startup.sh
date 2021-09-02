@@ -42,6 +42,7 @@ if ! test -f "$CONDARC"; then
 cat <<EOT >> $CONDARC
 channels:
   - conda-forge
+  - pyrocko
   - defaults
 
 channel_priority: strict
@@ -51,26 +52,20 @@ create_default_packages:
   - kernda
 
 envs_dirs:
-  - /home/jovyan/.local/envs
   - /opt/conda/envs
 EOT
 fi
 
 conda init
 
-mkdir -p "$HOME"/.local/envs/
-
-LOCAL="$HOME"/.local
-ENVS="$LOCAL"/envs
 NAME=unavco
-PREFIX="$ENVS"/"$NAME"
-SITE_PACKAGES=$PREFIX"/lib/python3.8/site-packages"
+PREFIX=/opt/conda/envs/"$NAME"
 
 if [ ! -d "$PREFIX" ]; then
-  conda env create -f "$ENVS"/"$NAME".yml
+  conda env create -f "${UNAVCO_FILES}"/"$NAME".yml
   conda run -n "$NAME" kernda --display-name "$NAME" -o --env-dir "$PREFIX" "$PREFIX"/share/jupyter/kernels/python3/kernel.json
 else
-  conda env update -f "$ENVS"/"$NAME".yml
+  conda env update -f "${UNAVCO_FILES}"/"$NAME".yml
 fi
 
 conda clean -p -t --yes
