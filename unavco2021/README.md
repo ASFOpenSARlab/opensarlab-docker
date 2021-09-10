@@ -79,6 +79,7 @@ WSL 2 is a paired down version of Linux running on Windows 10+.
 
 - If you are using Mac OSX:
     - In a terminal, move to the case-sensitive volume you created using the instructions above
+        - `cd /Volumes/unavco`
     - run `git clone git@github.com:ASFOpenSARlab/opensarlab-docker.git`
 
 - If you are using Ubuntu:
