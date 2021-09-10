@@ -1,6 +1,6 @@
 # Building the UNAVCO Docker Image and Running it in a Docker Container
 
-Note: Currently M1 Macs are not supported. We haven't tested this on X86 Macs but believe they will work. Please let us know if you have trouble following these steps on an X86 Mac.
+Note: Currently M1 Macs are not supported.
 
 # (If Using Windows) Install WSL 2
 
