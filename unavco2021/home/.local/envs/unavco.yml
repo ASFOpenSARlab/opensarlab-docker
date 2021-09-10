@@ -43,6 +43,7 @@ dependencies:
     - git+https://github.com/insarlab/PySolid.git
     - git+https://github.com/tylere/pykml.git
     - git+https://github.com/pyrocko/kite
+    - git+https://github.com/asfadmin/Discovery-asf_search
     - okada_wrapper
     - asf_hyp3
     - hyp3-sdk~=1.0

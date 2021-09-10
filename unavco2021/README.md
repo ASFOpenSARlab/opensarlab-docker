@@ -32,10 +32,62 @@ WSL 2 is a paired down version of Linux running on Windows 10+.
     - [Instructions](https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account)
   
 
+# (If Using MacOS) Create a Case-Sensitive Disc Image
+- Open `Disc Utility`
+
+    ![Disk Utility](img/disc_utility.png)
+
+- Create a blank image
+    - Select `File -> New Image -> Blank Image...`
+    
+  ![blank image](img/blank_image.png)
+  
+    - Fill out the image details
+        - `Save As`
+            - name of the `.dmg` file the image will be saved to (unavco)
+        - `Where`
+            - directory where `.dmg` will be saved (wherever you like)
+        - `Name`
+            - name of the image itself (unavco)
+        - `Size`
+            - amount of space available on the image (should be large enough to hold your environment and data)
+        - `Format`
+            - `APFS (Case-sensitive)`
+        - Leave remaining fields set to their default values
+    - Click the `Save` button
+    
+    ![create image](img/create_image.png)
+ 
+- Open a terminal
+  - change directories into your mounted volume (created from your new disc image)
+    - `cd /Volumes/unavco`
+  - confirm case-sensitivity by creating two directories or files whose name differ only in capitalization
+    - `mkdir a`
+    - `mkdir A`
+    - if you are able to create both files or directories, the file system is case-sensitive
+    
+    ![confirm case sensitivity](img/confirm_case_sensitive.png)
+     
+
 # Clone the Git Repository to Your Computer
 
-- Open a terminal (WSL 2 if on Windows)
-- run `git clone https://github.com/ASFOpenSARlab/opensarlab-docker.git`
+- If you are using Windows:
+    - Open WSL2 terminal
+    - Move to your Linux home directory using `cd ~/`
+        - Run `pwd` to check that you are in `/home/<username>/`. At a minimum, make sure you don't have `/mnt/c/` when you use `pwd`.
+    - Once you are in Linux side of WSL, run `git clone git@github.com:ASFOpenSARlab/opensarlab-docker.git` to clone the repo.
+
+- If you are using Mac OSX:
+    - In a terminal, move to the case-sensitive volume you created using the instructions above
+        - `cd /Volumes/unavco`
+    - run `git clone git@github.com:ASFOpenSARlab/opensarlab-docker.git`
+
+- If you are using Ubuntu:
+    - Open your terminal
+    - run `git clone git@github.com:ASFOpenSARlab/opensarlab-docker.git`
+
+### **WARNING** - Windows (WSL) and Mac OSX file systems are **case-insensitive** by default, which will cause an issue if the above operating system specific instructions are not followed.
+<br />
 
 # Change to the Directory Holding build_start_unavco_container.sh
 
