@@ -75,16 +75,16 @@ WSL 2 is a paired down version of Linux running on Windows 10+.
     - Open WSL2 terminal
     - Move to your Linux home directory using `cd ~/`
         - Run `pwd` to check that you are in `/home/<username>/`. At a minimum, make sure you don't have `/mnt/c/` when you use `pwd`.
-    - Once you are in Linux side of WSL, run `git clone git@github.com:ASFOpenSARlab/opensarlab-docker.git` to clone the repo.
+    - Once you are in Linux side of WSL, run `git clone git@github.com:ASFOpenSARlab/opensarlab-docker.git` to clone the repo using ssh or `git clone https://github.com/ASFOpenSARlab/opensarlab-docker.git` to clone it using https.
 
 - If you are using Mac OSX:
     - In a terminal, move to the case-sensitive volume you created using the instructions above
         - `cd /Volumes/unavco`
-    - run `git clone git@github.com:ASFOpenSARlab/opensarlab-docker.git`
+    - run `git clone git@github.com:ASFOpenSARlab/opensarlab-docker.git` to clone the repo using shh or `https://github.com/ASFOpenSARlab/opensarlab-docker.git` to clone it using https.
 
 - If you are using Ubuntu:
     - Open your terminal
-    - run `git clone git@github.com:ASFOpenSARlab/opensarlab-docker.git`
+    - run `git clone git@github.com:ASFOpenSARlab/opensarlab-docker.git` to clone the repo using ssh or `https://github.com/ASFOpenSARlab/opensarlab-docker.git` to clone it using https.
 
 ### **WARNING** - Windows (WSL) and Mac OSX file systems are **case-insensitive** by default, which will cause an issue if the above operating system specific instructions are not followed.
 <br />
