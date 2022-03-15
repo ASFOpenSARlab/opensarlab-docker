@@ -41,12 +41,7 @@ RUN apt update && \
 
 ENV UNAVCO_FILES /etc/unavco
 
-RUN cp /usr/lib/x86_64-linux-gnu/libgeotiff.so.5 /usr/lib/x86_64-linux-gnu/libgeotiff.so.2 && \
-    cp /usr/lib/libgdal.so /usr/lib/libgdal.so.20 && \
-    cp /usr/lib/x86_64-linux-gnu/libproj.so.19 /usr/lib/x86_64-linux-gnu/libproj.so.12 && \
-    cp /usr/lib/x86_64-linux-gnu/libhdf5_serial.so.103 /usr/lib/x86_64-linux-gnu/libhdf5_serial.so.100 && \
-    cp /usr/lib/x86_64-linux-gnu/libnetcdf.so.15 /usr/lib/x86_64-linux-gnu/libnetcdf.so.13 && \
-    mkdir $UNAVCO_FILES && \
+RUN mkdir $UNAVCO_FILES && \
     conda install -c conda-forge jupyter_contrib_nbextensions \
       jupyter_nbextensions_configurator \
       jupyter-resource-usage conda-pack \
