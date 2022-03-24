@@ -68,10 +68,11 @@ SITE_PACKAGES=$PREFIX"/lib/python3.8/site-packages"
 
 if [ ! -d "$PREFIX" ]; then
   conda env create -f "$ENVS"/"$NAME".yml
-  conda run -n "$NAME" kernda --display-name "$NAME" -o --env-dir "$PREFIX" "$PREFIX"/share/jupyter/kernels/python3/kernel.json
 else
   conda env update -f "$ENVS"/"$NAME".yml
 fi
+
+conda run -n "$NAME" kernda --display-name "$NAME" -o --env-dir "$PREFIX" "$PREFIX"/share/jupyter/kernels/python3/kernel.json
 
 conda clean -p -t --yes
 
