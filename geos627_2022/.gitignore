@@ -1,0 +1,19 @@
+**
+!home
+!home/.local
+!home/.local/envs
+# !home/.local/envs/unavco.yml
+!build_start_geos627_container.sh
+!dockerfile
+!.gitignore
+!.dockerignore
+!etc/
+!etc/**
+!README.md
+!img/
+!img/**
+!images
+!images/inverse
+!images/inverse/envs/**
+!images/inverse/etc/**
+!README.md

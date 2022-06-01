@@ -1,0 +1,96 @@
+FROM jupyter/base-notebook@sha256:8635b39569cddecf2fac3d95ffe7777d007153e46d47a5dc873357d7cb2d5478
+
+LABEL organization="Alaska Satellite Facility"
+LABEL author="Alex Lewandowski, Rui Kawahara, & Eric Lundell"
+LABEL creation_date="2022-05-26"
+
+### To run dockerfile
+# docker run -it -p 8888:8888 inverse
+# where "inverse" is the name of the image
+
+# Base Stage ****************************************************************
+USER root
+
+RUN set -ve
+
+RUN apt update && \
+    apt install --no-install-recommends -y \
+        software-properties-common \
+        git && \
+    add-apt-repository -y ppa:ubuntugis/ubuntugis-unstable && \
+    apt update && \
+    apt upgrade -y
+
+RUN apt update && \
+    apt install --no-install-recommends -y \
+        zip \
+        unzip \
+        wget \
+        vim \
+        rsync \
+        less \
+        snaphu \
+        curl \
+        openssh-client \
+        libgl1-mesa-glx \
+        emacs \
+        gnupg2 \
+        jq \
+        gfortran \
+        proj-bin \
+        geotiff-bin \
+        libshp-dev \
+        libshp2 \
+        libhdf5-dev \
+        libnetcdf-dev \
+        libgdal-dev \
+        libgsl-dev
+
+ENV LOCAL_FILES images/inverse
+ENV INVERSE_FILES geos627
+
+RUN conda update -n base conda mamba
+
+RUN mkdir $INVERSE_FILES &&\
+    conda install -c conda-forge jupyter_contrib_nbextensions \
+    jupyter_nbextensions_configurator \
+    jupyter-resource-usage \
+    conda-pack \
+    kernda \
+    nb_conda_kernels \
+    mamba_gator
+
+RUN chmod -R 777 geos627/
+
+# Copy essential files from this directory to docker image
+COPY ${LOCAL_FILES}/etc/pull.py ${INVERSE_FILES}/etc/pull.py
+COPY ${LOCAL_FILES}/etc/startup.sh ${INVERSE_FILES}/etc/startup.sh
+COPY ${LOCAL_FILES}/etc/00-df.py ${INVERSE_FILES}/etc/00-df.py
+COPY ${LOCAL_FILES}/envs/install_insar_analysis_pkgs.sh ${INVERSE_FILES}/envs/install_insar_analysis_pkgs.sh
+COPY ${LOCAL_FILES}/envs/insar_analysis.yml ${INVERSE_FILES}/envs/insar_analysis.yml
+COPY ${LOCAL_FILES}/envs/inverse_env.yml ${INVERSE_FILES}/envs/inverse_env.yml
+
+RUN git clone https://github.com/uafgeoteach/GEOS627_inverse.git
+
+# COPY inverse/etc/pull.py ${INVERSE_FILES}/etc/pull.py
+# COPY inverse/etc/startup.sh ${INVERSE_FILES}/etc/startup.sh
+# COPY inverse/etc/00-df.py ${INVERSE_FILES}/etc/00-df.py
+# COPY inverse/envs/install_insar_analysis_pkgs.sh ${INVERSE_FILES}/envs/install_insar_analysis_pkgs.sh
+# COPY inverse/envs/insar_analysis.yml ${INVERSE_FILES}/envs/insar_analysis.yml
+# COPY inverse/envs/inverse_env.yml ${INVERSE_FILES}/envs/inverse_env.yml
+
+# Setup inverse_env env
+ENV INVERSE="inverse"
+RUN conda env create -f ${INVERSE_FILES}/envs/inverse_env.yml && \
+    conda run -n "$INVERSE" kernda -o --display-name "$INVERSE" /opt/conda/envs/"$INVERSE"/share/jupyter/kernels/python3/kernel.json && \
+    conda clean --yes --all && \
+    chmod -R 755 /opt/conda/envs && \
+    chown -R jovyan:users /opt/conda/envs
+    #&& \
+    # git clone https://github.com/uafgeoteach/GEOS627_inverse.git
+
+USER jovyan
+
+EXPOSE 8888
+
+ENTRYPOINT bash ${INVERSE_FILES}/startup.sh; jupyter lab --no-browser --allow-root

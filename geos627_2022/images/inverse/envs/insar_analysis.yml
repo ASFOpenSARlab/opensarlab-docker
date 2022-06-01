@@ -1,0 +1,43 @@
+name: insar_analysis
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python>=3.6,<3.9
+  - jupyter
+  - kernda
+  - ipyfilechooser
+  - mgrs
+  - isce2
+  - pip
+  - cartopy
+  - cvxopt
+  - dask>=1.0
+  - dask-jobqueue>=0.3
+  - defusedxml
+  - h5py<3
+  - lxml
+  - matplotlib
+  - numpy
+  - pyproj
+  - scikit-image
+  - scipy
+  - boto3
+  - joblib
+  - shapely
+  - hyp3lib=1.4.1
+  - cython
+  - cdsapi
+  - ecCodes
+  - netcdf4
+  - pygrib
+  - pyhdf
+  - pyresample
+  - openmp
+  - pykdtree
+  - xarray
+  - zarr
+  - mintpy
+  - asf_search
+  - pip:
+    - hyp3-sdk
