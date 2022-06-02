@@ -13,8 +13,8 @@
 !img/
 !img/**
 !images
-!images/inverse
-!images/inverse/etc
-!images/inverse/etc/**
-!images/inverse/envs/**
-!README.md
+!inverse
+!inverse/etc
+!inverse/etc/**
+!inverse/envs
+!inverse/envs/**

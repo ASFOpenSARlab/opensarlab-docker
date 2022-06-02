@@ -46,7 +46,6 @@ RUN apt update && \
         libgdal-dev \
         libgsl-dev
 
-ENV LOCAL_FILES inverse
 ENV INVERSE_FILES geos627
 
 RUN conda update -n base conda mamba
@@ -63,17 +62,16 @@ RUN mkdir $INVERSE_FILES &&\
 RUN chmod -R 777 geos627/
 
 # Copy essential files from this directory to docker image
-COPY ${LOCAL_FILES}/etc/pull.py ${INVERSE_FILES}/etc/pull.py
-COPY ${LOCAL_FILES}/etc/startup.sh ${INVERSE_FILES}/etc/startup.sh
-COPY ${LOCAL_FILES}/etc/00-df.py ${INVERSE_FILES}/etc/00-df.py
-COPY ${LOCAL_FILES}/envs/install_insar_analysis_pkgs.sh ${INVERSE_FILES}/envs/install_insar_analysis_pkgs.sh
-COPY ${LOCAL_FILES}/envs/insar_analysis.yml ${INVERSE_FILES}/envs/insar_analysis.yml
-COPY ${LOCAL_FILES}/envs/inverse_env.yml ${INVERSE_FILES}/envs/inverse_env.yml
-
-RUN git clone https://github.com/uafgeoteach/GEOS627_inverse.git
+COPY etc/pull.py ${INVERSE_FILES}/etc/pull.py
+COPY etc/startup.sh ${INVERSE_FILES}/etc/startup.sh
+COPY etc/00-df.py ${INVERSE_FILES}/etc/00-df.py
+COPY envs/install_insar_analysis_pkgs.sh ${INVERSE_FILES}/envs/install_insar_analysis_pkgs.sh
+COPY envs/insar_analysis.yml ${INVERSE_FILES}/envs/insar_analysis.yml
+COPY envs/inverse_env.yml ${INVERSE_FILES}/envs/inverse_env.yml
 
 # Setup inverse_env env
 ENV INVERSE="inverse"
+# .yml and pkg.sh file exist in images/inverse/envs
 RUN conda env create -f ${INVERSE_FILES}/envs/inverse_env.yml && \
     conda run -n "$INVERSE" kernda -o --display-name "$INVERSE" /opt/conda/envs/"$INVERSE"/share/jupyter/kernels/python3/kernel.json && \
     conda clean --yes --all && \

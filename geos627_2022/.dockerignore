@@ -1,5 +1,5 @@
 **
 !dockerfile
-!images/inverse/etc/**
-!images/inverse/envs/**
+!inverse/etc/**
+!inverse/envs/**
 # !etc/**
