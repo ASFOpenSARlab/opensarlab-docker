@@ -7,13 +7,14 @@
 !dockerfile
 !.gitignore
 !.dockerignore
-!etc/
-!etc/**
+# !etc/
+# !etc/**
 !README.md
 !img/
 !img/**
 !images
 !images/inverse
-!images/inverse/envs/**
+!images/inverse/etc
 !images/inverse/etc/**
+!images/inverse/envs/**
 !README.md

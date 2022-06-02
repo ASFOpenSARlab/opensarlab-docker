@@ -1,12 +1,12 @@
 *
-local-build.sh 
+# local-build.sh 
 !.gitignore
 !jupyter-hooks/
 !jupyter-hooks/**
-!build.sh
-!dockerfile
-!download.sh
+# !build.sh
+# !dockerfile
+# !download.sh
 !jupyter-files/
 !jupyter-files/**
-!envs/
-!envs/**
+# !envs/
+# !envs/**
