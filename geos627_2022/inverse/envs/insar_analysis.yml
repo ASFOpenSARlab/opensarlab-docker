@@ -39,5 +39,6 @@ dependencies:
   - zarr
   - mintpy
   - asf_search
+  - nbconvert
   - pip:
     - hyp3-sdk

@@ -16,7 +16,7 @@ pip install --user \
 # REMINDER: REMOVE IF CHANGES ARE MERGED TO NBGITPULLER
 python=$(python --version 2>&1)
 v=$(echo $python | cut -d'.' -f 2)
-cp "${INVERSE_FILES}"/pull.py /home/jovyan/.local/lib/python3."$v"/site-packages/nbgitpuller/pull.py
+cp "${INVERSE_FILES}"/etc/pull.py /home/jovyan/.local/lib/python3."$v"/site-packages/nbgitpuller/pull.py
 
 # cp "${INVERSE_FILES}"/install_unavco_pkgs.sh /home/jovyan/.local/install_unavco_pkgs.sh
 
@@ -31,11 +31,11 @@ jupyter serverextension enable --py hide_code --user
 
 # Copy custom jupyter magic command, df (displays available disc space on volume)
 mkdir -p $HOME/.ipython/image_default/startup/
-cp "${INVERSE_FILES}"/00-df.py $HOME/.ipython/image_default/startup/00-df.py
+cp "${INVERSE_FILES}"/etc/00-df.py $HOME/.ipython/image_default/startup/00-df.py
 
 # Pull in any repos you would like cloned to user volumes
-gitpuller https://github.com/parosen/Geo-SInC.git main $HOME/Geo-SInC
-
+# gitpuller https://github.com/parosen/Geo-SInC.git main $HOME/Geo-SInC
+gitpuller https://github.com/uafgeoteach/GEOS627_inverse.git main $HOME/GEOS627_inverse
 CONDARC=$HOME/.condarc
 if ! test -f "$CONDARC"; then
 cat <<EOT >> $CONDARC
@@ -81,6 +81,7 @@ mv temp "$JN_CONFIG";
 fi
 
 # source ~/.local/install_unavco_pkgs.sh
+source ~/.local/install_insar_analysis_pkgs.sh
 
 BASH_RC=/home/jovyan/.bashrc
 # grep -qxF 'conda activate unavco' $BASH_RC || echo 'conda activate unavco' >> $BASH_RC
