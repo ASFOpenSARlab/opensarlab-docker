@@ -42,9 +42,10 @@ RUN apt update && \
         libgdal-dev \
         libgsl-dev
 
-ENV LOCAL_FILES inverse
-# ENV INVERSE_FILES geos627
+# ENV LOCAL_FILES 
+ENV LOCAL_FILES home/.local/envs
 ENV INVERSE_FILES home
+# ENV INVERSE_FILES /etc/inverse
 
 RUN conda update -n base conda mamba
 
@@ -57,19 +58,21 @@ RUN mkdir $INVERSE_FILES &&\
     nb_conda_kernels \
     mamba_gator
 
-# RUN chmod -R 777 geos627/
+# RUN chmod -R 777 /etc/inverse
 RUN chmod -R 777 home/
 
 # Copy essential files from this directory to docker image
-# COPY ${LOCAL_FILES}/etc/pull.py ${INVERSE_FILES}/etc/pull.py
-# COPY ${LOCAL_FILES}/etc/startup.sh ${INVERSE_FILES}/etc/startup.sh
-# COPY ${LOCAL_FILES}/etc/00-df.py ${INVERSE_FILES}/etc/00-df.py
-COPY ${LOCAL_FILES}/etc/pull.py etc/pull.py
-COPY ${LOCAL_FILES}/etc/startup.sh etc/startup.sh
-COPY ${LOCAL_FILES}/etc/00-df.py etc/00-df.py
-COPY ${LOCAL_FILES}/envs/install_insar_analysis_pkgs.sh ${INVERSE_FILES}/envs/install_insar_analysis_pkgs.sh
-COPY ${LOCAL_FILES}/envs/insar_analysis.yml ${INVERSE_FILES}/envs/insar_analysis.yml
-COPY ${LOCAL_FILES}/envs/inverse_env.yml ${INVERSE_FILES}/envs/inverse_env.yml
+# COPY etc/pull.py ${INVERSE_FILES}/pull.py
+# COPY etc/startup.sh ${INVERSE_FILES}/startup.sh
+# COPY etc/00-df.py ${INVERSE_FILES}/00-df.py
+# COPY etc/install_insar_analysis_pkgs.sh etc/install_insar_analysis_pkgs.sh
+COPY etc/pull.py etc/pull.py
+COPY etc/startup.sh etc/startup.sh
+COPY etc/00-df.py etc/00-df.py
+COPY etc/install_insar_analysis_pkgs.sh etc/install_insar_analysis_pkgs.sh
+
+COPY ${LOCAL_FILES}/insar_analysis.yml ${INVERSE_FILES}/envs/insar_analysis.yml
+COPY ${LOCAL_FILES}/inverse_env.yml ${INVERSE_FILES}/envs/inverse_env.yml
 
 # RUN git clone https://github.com/uafgeoteach/GEOS627_inverse.git
 
@@ -85,7 +88,5 @@ USER jovyan
 
 EXPOSE 8888
 
-# ENTRYPOINT bash inverse/etc/startup.sh; jupyter lab --no-browser --allow-root
-# ENTRYPOINT bash ${INVERSE_FILES}/etc/startup.sh; jupyter lab --no-browser --allow-root
+# ENTRYPOINT bash ${INVERSE_FILES}/startup.sh; jupyter lab --no-browser --allow-root
 ENTRYPOINT bash etc/startup.sh; jupyter lab --no-browser --allow-root
-# ENTRYPOINT jupyter lab --no-browser --allow-root

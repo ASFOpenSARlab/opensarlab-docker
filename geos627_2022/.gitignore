@@ -7,8 +7,8 @@
 !dockerfile
 !.gitignore
 !.dockerignore
-# !etc/
-# !etc/**
+!etc/
+!etc/**
 !README.md
 !img/
 !img/**
