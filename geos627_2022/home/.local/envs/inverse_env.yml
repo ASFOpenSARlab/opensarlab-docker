@@ -1,0 +1,20 @@
+name: inverse
+channels:
+  - conda-forge
+  - anaconda
+  - default
+dependencies:
+  - python=3.8
+  - ipywidgets
+  - ipyfilechooser
+  - jupyter
+  - kernda
+  - jupyter_contrib_nbextensions
+  - jupyter_nbextensions_configurator
+  - jupyter-resource-usage
+  - matplotlib
+  - numpy
+  - pandas
+  - scipy
+  - sympy
+  - pip
