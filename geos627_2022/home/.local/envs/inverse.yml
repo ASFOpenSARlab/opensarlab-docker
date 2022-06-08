@@ -7,6 +7,7 @@ dependencies:
   - python=3.8
   - ipywidgets
   - ipyfilechooser
+  - ipympl==0.8.8
   - jupyter
   - kernda
   - jupyter_contrib_nbextensions
@@ -17,4 +18,7 @@ dependencies:
   - pandas
   - scipy
   - sympy
+  - traitlets==5.1.1
   - pip
+  - pip:
+    - df-jupyter-magic

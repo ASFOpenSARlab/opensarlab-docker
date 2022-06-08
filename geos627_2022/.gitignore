@@ -2,7 +2,8 @@
 !home
 !home/.local
 !home/.local/envs
-# !home/.local/envs/unavco.yml
+!home/.local/envs/insar_analysis.yml
+!home/.local/envs/inverse.yml
 !build_start_geos627_container.sh
 !dockerfile
 !.gitignore

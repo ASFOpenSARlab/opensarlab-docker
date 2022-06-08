@@ -16,6 +16,7 @@ dependencies:
   - dask-jobqueue>=0.3
   - defusedxml
   - h5py<3
+  - ipympl==0.8.8
   - lxml
   - matplotlib
   - numpy
@@ -35,9 +36,11 @@ dependencies:
   - pyresample
   - openmp
   - pykdtree
+  - traitlets==5.1.1
   - xarray
   - zarr
   - mintpy
   - asf_search
   - pip:
+    - df-jupyter-magic
     - hyp3-sdk

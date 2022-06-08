@@ -1,44 +1,29 @@
 #!/usr/bin/env bash
 
-# GEOS627 - inverse
-
 set -ex
 
-pip install --user \
+python -m pip install --user \
     nbgitpuller \
     ipywidgets \
-    mpldatacursor \
-    rise \
-    hide_code \
-    jupyter_nbextensions_configurator
+    mpldatacursor
 
 # copy over our version of pull.py
 # REMINDER: REMOVE IF CHANGES ARE MERGED TO NBGITPULLER
 python=$(python --version 2>&1)
 v=$(echo $python | cut -d'.' -f 2)
-# cp "${INVERSE_FILES}"/etc/pull.py /home/jovyan/.local/lib/python3."$v"/site-packages/nbgitpuller/pull.py
-cp etc/pull.py /home/jovyan/.local/lib/python3."$v"/site-packages/nbgitpuller/pull.py
+cp "${INVERSE_FILES}"/pull.py /home/jovyan/.local/lib/python3."$v"/site-packages/nbgitpuller/pull.py
 
-# cp "${INVERSE_FILES}"/install_unavco_pkgs.sh /home/jovyan/.local/install_unavco_pkgs.sh
-cp etc/install_insar_analysis_pkgs.sh /home/jovyan/.local/install_insar_analysis_pkgs.sh
+cp "${INVERSE_FILES}"/install_insar_analysis_pkgs.sh /home/jovyan/.local/install_insar_analysis_pkgs.sh
 
-# Install and enable nbextensions
+# enable nbgitpuller
 jupyter serverextension enable --py nbgitpuller
-jupyter nbextensions_configurator enable --user
-jupyter nbextension enable --py widgetsnbextension --user
-jupyter-nbextension enable rise --py --user
-jupyter nbextension install --py hide_code --user
-jupyter nbextension enable --py hide_code --user
-jupyter serverextension enable --py hide_code --user
 
-# Copy custom jupyter magic command, df (displays available disc space on volume)
-mkdir -p $HOME/.ipython/image_default/startup/
-# cp "${INVERSE_FILES}"/etc/00-df.py $HOME/.ipython/image_default/startup/00-df.py
-cp etc/00-df.py $HOME/.ipython/image_default/startup/00-df.py
+# Add Path to local pip execs.
+export PATH=$HOME/.local/bin:$PATH
 
 # Pull in any repos you would like cloned to user volumes
-# gitpuller https://github.com/parosen/Geo-SInC.git main $HOME/Geo-SInC
 gitpuller https://github.com/uafgeoteach/GEOS627_inverse.git main $HOME/GEOS627_inverse
+
 CONDARC=$HOME/.condarc
 if ! test -f "$CONDARC"; then
 cat <<EOT >> $CONDARC
@@ -61,21 +46,33 @@ mkdir -p "$HOME"/.local/envs/
 
 LOCAL="$HOME"/.local
 ENVS="$LOCAL"/envs
-# NAME=unavco
 NAME=inverse
 PREFIX="$ENVS"/"$NAME"
-SITE_PACKAGES=$PREFIX"/lib/python3.8/site-packages"
+SITE_PACKAGES=$PREFIX"/lib/python3."$v"/site-packages"
 
-# where .yml file will be read
+# Create inverse env
 if [ ! -d "$PREFIX" ]; then
-  conda env create -f "$ENVS"/"$NAME".yml
+  mamba env create -f "$ENVS"/"$NAME".yml -q
+  mamba run -n "$NAME" kernda --display-name "$NAME" -o --env-dir "$PREFIX" "$PREFIX"/share/jupyter/kernels/python3/kernel.json
 else
-  conda env update -f "$ENVS"/"$NAME".yml
+  mamba env update -f "$ENVS"/"$NAME".yml -q
 fi
 
-conda run -n "$NAME" kernda --display-name "$NAME" -o --env-dir "$PREFIX" "$PREFIX"/share/jupyter/kernels/python3/kernel.json
+# Create insar_analysis env
+NAME=insar_analysis
+PREFIX="$ENVS"/"$NAME"
+SITE_PACKAGES=$PREFIX"/lib/python3."$v"/site-packages"
 
-conda clean -p -t --yes
+if [ ! -d "$PREFIX" ]; then
+  mamba env create -f "$ENVS"/"$NAME".yml -q
+  mamba run -n "$NAME" kernda --display-name "$NAME" -o --env-dir "$PREFIX" "$PREFIX"/share/jupyter/kernels/python3/kernel.json
+else
+  mamba env update -f "$ENVS"/"$NAME".yml -q
+fi
+
+source ~/.local/install_insar_analysis_pkgs.sh
+
+mamba clean -p -t --yes
 
 JN_CONFIG=$HOME/.jupyter/jupyter_notebook_config.json
 if ! grep -q "\"CondaKernelSpecManager\":" "$JN_CONFIG"; then
@@ -83,18 +80,19 @@ jq '. += {"CondaKernelSpecManager": {"name_format": "{display_name}", "env_filte
 mv temp "$JN_CONFIG";
 fi
 
-# source ~/.local/install_unavco_pkgs.sh
-source ~/.local/install_insar_analysis_pkgs.sh
-
 BASH_RC=/home/jovyan/.bashrc
-# grep -qxF 'conda activate unavco' $BASH_RC || echo 'conda activate unavco' >> $BASH_RC
 grep -qxF 'conda activate inverse' $BASH_RC || echo 'conda activate inverse' >> $BASH_RC
 
 BASH_PROFILE=$HOME/.bash_profile
 if ! test -f "$BASH_PROFILE"; then
-cat <<EOT >> $BASH_PROFILE
+cat <<EOT > $BASH_PROFILE
 if [ -s ~/.bashrc ]; then
     source ~/.bashrc;
 fi
 EOT
 fi
+
+python -m pip install df-jupyter-magic
+cat <<EOT > "$HOME"/.ipython/profile_default/ipython_config.py
+c.InteractiveShellApp.extensions = ['df_jupyter_magic']
+EOT
