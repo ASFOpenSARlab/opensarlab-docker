@@ -58,6 +58,8 @@ else
   mamba env update -f "$ENVS"/"$NAME".yml -q
 fi
 
+mamba clean --yes --all
+
 # Create insar_analysis env
 NAME=insar_analysis
 PREFIX="$ENVS"/"$NAME"
@@ -72,7 +74,7 @@ fi
 
 source ~/.local/install_insar_analysis_pkgs.sh
 
-mamba clean -p -t --yes
+mamba clean --yes --all
 
 JN_CONFIG=$HOME/.jupyter/jupyter_notebook_config.json
 if ! grep -q "\"CondaKernelSpecManager\":" "$JN_CONFIG"; then
