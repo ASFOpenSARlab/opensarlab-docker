@@ -44,3 +44,4 @@ dependencies:
     - h5py<3
     - mintpy
     - url-widget
+    - df-jupyter-magic

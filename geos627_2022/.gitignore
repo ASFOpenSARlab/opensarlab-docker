@@ -19,3 +19,4 @@
 !inverse/etc/**
 !inverse/envs
 !inverse/envs/**
+!Makefile
