@@ -60,22 +60,6 @@ fi
 
 mamba clean --yes --all
 
-# Create insar_analysis env
-NAME=insar_analysis
-PREFIX="$ENVS"/"$NAME"
-SITE_PACKAGES=$PREFIX"/lib/python3."$v"/site-packages"
-
-if [ ! -d "$PREFIX" ]; then
-  mamba env create -f "$ENVS"/"$NAME".yml -q
-  mamba run -n "$NAME" kernda --display-name "$NAME" -o --env-dir "$PREFIX" "$PREFIX"/share/jupyter/kernels/python3/kernel.json
-else
-  mamba env update -f "$ENVS"/"$NAME".yml -q
-fi
-
-source ~/.local/install_insar_analysis_pkgs.sh
-
-mamba clean --yes --all
-
 JN_CONFIG=$HOME/.jupyter/jupyter_notebook_config.json
 if ! grep -q "\"CondaKernelSpecManager\":" "$JN_CONFIG"; then
 jq '. += {"CondaKernelSpecManager": {"name_format": "{display_name}", "env_filter": ".*opt/conda.*"}}' "$JN_CONFIG" >> temp;
