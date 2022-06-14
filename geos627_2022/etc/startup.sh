@@ -13,8 +13,6 @@ python=$(python --version 2>&1)
 v=$(echo $python | cut -d'.' -f 2)
 cp "${INVERSE_FILES}"/pull.py /home/jovyan/.local/lib/python3."$v"/site-packages/nbgitpuller/pull.py
 
-cp "${INVERSE_FILES}"/install_insar_analysis_pkgs.sh /home/jovyan/.local/install_insar_analysis_pkgs.sh
-
 # enable nbgitpuller
 jupyter serverextension enable --py nbgitpuller
 
