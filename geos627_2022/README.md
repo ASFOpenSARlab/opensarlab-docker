@@ -46,6 +46,8 @@ Your task manager should look something like this:
 
 ![task manager](img/task_mngr.PNG)
 
+For reference, your computer may slow down when 80% of your memory is being used.
+
 ## Install Docker
 ---
 - [Windows Instructions using WSL2](https://docs.docker.com/desktop/windows/install/)
