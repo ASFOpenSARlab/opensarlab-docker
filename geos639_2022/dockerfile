@@ -97,7 +97,7 @@ RUN conda init
 # this may fail
 # may be the issue; permission worked
 # permission error on local?
-# USER jovyan
+USER jovyan
 
 EXPOSE 8888
 ENTRYPOINT jupyter lab --no-browser --allow-root
