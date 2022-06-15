@@ -65,7 +65,6 @@ RUN conda clean --yes --all && \
 # Copy essential files from this directory to docker image
 COPY etc/pull.py ${INVERSE_FILES}/pull.py
 COPY etc/startup.sh ${INVERSE_FILES}/startup.sh
-# COPY etc/install_insar_analysis_pkgs.sh ${INVERSE_FILES}/install_insar_analysis_pkgs.sh
 
 USER jovyan
 
