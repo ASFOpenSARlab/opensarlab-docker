@@ -9,16 +9,16 @@ USER root
 
 RUN set -ve
 
-RUN apt update && \
-    apt install --no-install-recommends -y \
+RUN apt-get update && \
+    apt-get install --no-install-recommends -y \
         software-properties-common \
         git && \
     add-apt-repository -y ppa:ubuntugis/ubuntugis-unstable && \
-    apt update && \
-    apt upgrade -y
+    apt-get update && \
+    apt-get upgrade -y
 
-RUN apt update && \
-    apt install --no-install-recommends -y \
+RUN apt-get update && \
+    apt-get install --no-install-recommends -y \
         zip \
         unzip \
         wget \
