@@ -2,6 +2,12 @@
 
 set -ex
 
+#ls -a /home/jovyan/.local
+#mkdir /home/jovyan/.local/share
+#mkdir /home/jovyan/.local/lib
+#chown -R jovyan:users /home/jovyan/.local/share
+#chown -R jovyan:users /home/jovyan/.local/lib
+
 python -m pip install --user \
     nbgitpuller \
     ipywidgets \
@@ -40,6 +46,7 @@ fi
 
 conda init
 
+echo "create directory"
 mkdir -p "$HOME"/.local/envs/
 
 LOCAL="$HOME"/.local
@@ -50,9 +57,11 @@ SITE_PACKAGES=$PREFIX"/lib/python3."$v"/site-packages"
 
 # Create inverse env
 if [ ! -d "$PREFIX" ]; then
+  echo "mamba create"
   mamba env create -f "$ENVS"/"$NAME".yml -q
   mamba run -n "$NAME" kernda --display-name "$NAME" -o --env-dir "$PREFIX" "$PREFIX"/share/jupyter/kernels/python3/kernel.json
 else
+  echo "mamba update"
   mamba env update -f "$ENVS"/"$NAME".yml -q
 fi
 
