@@ -9,7 +9,31 @@ Running Docker is easier if you were to use WSL2, which is a paired down version
 - [WSL2 Installation Instructions](https://docs.microsoft.com/en-us/windows/wsl/install)
     - Install the terminal as described in the final optional step on the page linked above
 
-**Important Note for Windows User**:
+**Important Notes for Windows User**:
+
+### Use Linux Space to Run Docker
+As of now, Windows implementation will **only work if you were to run them on Linux side** of WSL 2. 
+
+To switch to a Linux side, you may run the following command on your WSL 2:
+```bash
+cd ~/
+```
+
+Refer to below example image to check if you are in Linux side:
+![WSL Linux Side](img/wsl_linux.PNG)
+
+
+Below example is what it would look like if you're in Windows side of WSL (i.e. will not work if your terminal looks like this):
+
+![WSL Windows Side](img/wsl_windows.PNG)
+
+If you cloned this repo on Windows side, you can move this entire directory to Linux side using following command:
+
+``` bash
+mv -v <path_to_opensarlab-docker>/opensarlab-docker ~/
+```
+
+### Resource Usage
 Running WSL2 and Docker may occasionally consume lot of resources. This can slow down your computer and sometimes crash programs that you are currently running (e.g. Google Chrome). If you are having issue with absurd memory consumption, you may need to set a consumption limit for your WSL2. 
 
 Here are some ways that you can limit your memory consumption by WSL2:
@@ -87,12 +111,36 @@ For reference, your computer may slow down when 80% of your memory is being used
     - run `git clone git@github.com:ASFOpenSARlab/opensarlab-docker.git` to clone the repo using ssh or `https://github.com/ASFOpenSARlab/opensarlab-docker.git` to clone it using https.
 
 
-## Change into a Directory Holding `build_start_geos627_container.sh`
+## Change into a Directory Holding `Makefile`
 ---
-`build_start_geos627_container.sh` is a script that will start up the geos627 environment. Since this script is in a root directory, you can run one of the two commands on your terminal to start the container:
+`Makefile` is a script that will start up the geos627 environment. Since this script is in a root directory, you can run the following commands on your terminal to start the container:
 
-- Option 1: `bash build_start_geos627_container.sh 2>&1 | tee log` 
-- Option 2: `make`
+```bash
+make
+```
+
+If you wish to clean your directory, you can use:
+```bash
+make clean
+```
+to remove files and directories that was genereted.
+
+**Notes on Running Container**
+In some instances, your Jupyter notebook may trigger error regarding to `permission denied`. If you happen to come across this error, try adding permission `home` directory located in this repository. To do so, you can do something like:
+
+```bash
+# note: use 777 as a last resourt.
+sudo chmod -R 766 home 
+```
+or 
+
+```bash
+sudo chown -R home
+```
+to add permission. 
+
+*For `chmod`, refer to [this](https://www.tutorialspoint.com/unix/unix-file-permission.htm) tutorial on what the numbers indicate. Typically, 666, 766, and 777 should work, but it may be worthwhile to understand what these numbers represent if you're concerned about security of this container. 
+
 
 ## If You Encounter Issues
 ---

@@ -12,4 +12,5 @@ clean:
 		home/.ipython home/.jupyter home/insar_analysis home/.ipynb_checkpoints \
 		home/.local/bin home/.local/lib home/.local/share home/.local/etc \
 		home/.local/envs/inverse home/.local/envs/.conda_envs_dir_test \
-		home/.bash_profile home/.bashrc home/.condarc home/GEOS627_inverse
+		home/.bash_profile home/.bashrc home/.condarc home/GEOS627_inverse \
+		home/bash_history home/.viminfo
