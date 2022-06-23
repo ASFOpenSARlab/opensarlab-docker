@@ -2,9 +2,8 @@
 !home
 !home/.local
 !home/.local/envs
-!home/.local/envs/insar_analysis.yml
-!home/.local/envs/inverse.yml
-!build_start_geos627_container.sh
+!home/.local/envs/rtc_analysis_env.yml
+!build_start_geos639_container.sh
 !dockerfile
 !.gitignore
 !.dockerignore
