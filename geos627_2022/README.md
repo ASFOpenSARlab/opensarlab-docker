@@ -72,6 +72,47 @@ Your task manager should look something like this:
 
 For reference, your computer may slow down when 80% of your memory is being used.
 
+
+## (If Using MacOS) Create a Case-Sensitive Disc Image
+---
+
+**Note: Some of the sample image uses 'unavco', but use 'geos627' instead.*
+
+- Open `Disc Utility`
+
+    ![Disk Utility](img/disc_utility.png)
+
+- Create a blank image
+    - Select `File -> New Image -> Blank Image...`
+    
+  ![blank image](img/blank_image.png)
+  
+    - Fill out the image details
+        - `Save As`
+            - name of the `.dmg` file the image will be saved to (unavco)
+        - `Where`
+            - directory where `.dmg` will be saved (wherever you like)
+        - `Name`
+            - name of the image itself (geos627)
+        - `Size`
+            - amount of space available on the image (should be large enough to hold your environment and data)
+        - `Format`
+            - `APFS (Case-sensitive)`
+        - Leave remaining fields set to their default values
+    - Click the `Save` button
+    
+    ![create image](img/create_image.png)
+ 
+- Open a terminal
+  - change directories into your mounted volume (created from your new disc image)
+    - `cd /Volumes/geos627`
+  - confirm case-sensitivity by creating two directories or files whose name differ only in capitalization
+    - `mkdir a`
+    - `mkdir A`
+    - if you are able to create both files or directories, the file system is case-sensitive
+    
+    ![confirm case sensitivity](img/confirm_case_sensitive.png)
+
 ## Install Docker
 ---
 - [Windows Instructions using WSL2](https://docs.docker.com/desktop/windows/install/)

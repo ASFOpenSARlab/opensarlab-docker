@@ -2,12 +2,6 @@
 
 set -ex
 
-#ls -a /home/jovyan/.local
-#mkdir /home/jovyan/.local/share
-#mkdir /home/jovyan/.local/lib
-#chown -R jovyan:users /home/jovyan/.local/share
-#chown -R jovyan:users /home/jovyan/.local/lib
-
 python -m pip install --user \
     nbgitpuller \
     ipywidgets \
