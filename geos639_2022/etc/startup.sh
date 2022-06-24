@@ -11,7 +11,7 @@ python -m pip install --user \
 # REMINDER: REMOVE IF CHANGES ARE MERGED TO NBGITPULLER
 python=$(python --version 2>&1)
 v=$(echo $python | cut -d'.' -f 2)
-cp "${INSAR_GEO}"/pull.py /home/jovyan/.local/lib/python3."$v"/site-packages/nbgitpuller/pull.py
+cp "${GEO_FILE}"/pull.py /home/jovyan/.local/lib/python3."$v"/site-packages/nbgitpuller/pull.py
 
 # enable nbgitpuller
 jupyter serverextension enable --py nbgitpuller
