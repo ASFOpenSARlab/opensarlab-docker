@@ -2,7 +2,7 @@
 !home
 !home/.local
 !home/.local/envs
-!home/.local/envs/rtc_analysis_env.yml
+!home/.local/envs/unavco_env.yml
 !build_start_geos639_container.sh
 !dockerfile
 !.gitignore
@@ -12,7 +12,6 @@
 !README.md
 !img/
 !img/**
-!images
 !inverse
 !inverse/etc
 !inverse/etc/**
