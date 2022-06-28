@@ -113,6 +113,10 @@ For reference, your computer may slow down when 80% of your memory is being used
     
     ![confirm case sensitivity](img/confirm_case_sensitive.png)
 
+#### **Troubleshooting for MacOS**
+- If you encounter a permission error, you may have to give full disk access to your terminal and dockerfile. For more information, refer to [this stackoverflow post](https://stackoverflow.com/questions/58479686/permissionerror-errno-1-operation-not-permitted-after-macos-catalina-update/59250494#59250494).
+
+
 ## Install Docker
 ---
 - [Windows Instructions using WSL2](https://docs.docker.com/desktop/windows/install/)
