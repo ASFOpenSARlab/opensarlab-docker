@@ -9,5 +9,6 @@ run:
 clean:
 	rm -rf home/.ipython home/.jupyter home/.condarc \
 			home/.cache home/.conda home/.bash_history \
-			home/.bashrc home/.local/share home/.local/bin \
-			home/.local/lib home/.local/etc
+			home/.bashrc home/.local/share home/.ipynb_checkpoints \
+			home/.local/bin home/.local/lib home/.local/etc \
+			home/.local/envs/unavco home/.local/envs/.conda_envs_dir_test
