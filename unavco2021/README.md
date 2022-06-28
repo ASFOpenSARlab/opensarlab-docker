@@ -67,6 +67,8 @@ WSL 2 is a paired down version of Linux running on Windows 10+.
     - if you are able to create both files or directories, the file system is case-sensitive
     
     ![confirm case sensitivity](img/confirm_case_sensitive.png)
+
+- If you encounter a permission error, you may have to give full disk access to your terminal and Docker system file. For more information, refer to [this stackoverflow post](https://stackoverflow.com/questions/58479686/permissionerror-errno-1-operation-not-permitted-after-macos-catalina-update/59250494#59250494).
      
 
 # Clone the Git Repository to Your Computer
