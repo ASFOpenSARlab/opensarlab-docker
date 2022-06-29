@@ -2,7 +2,7 @@
 !home
 !home/.local
 !home/.local/envs
-!home/.local/envs/unavco_env.yml
+!home/.local/envs/unavco.yml
 !build_start_geos639_container.sh
 !dockerfile
 !.gitignore

@@ -51,8 +51,8 @@ RUN pip install --upgrade nbconvert
 
 # Downgrade tornado otherwise the notebook can't connect to the notebook server. https://github.com/jupyter/notebook/issues/2664#issuecomment-468954423
 # RUN pip install tornado==5.1.1  # 4.5.3
-# RUN pip install tornado==5.1.1 \ 
-#     url-widget
+RUN pip install tornado==4.5.3 \ 
+    url-widget
 
 # # Install conda and mamba
 RUN conda install conda=4.12.0 && \
