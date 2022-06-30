@@ -14,13 +14,15 @@ dependencies:
   - dask-jobqueue>=0.3
   - defusedxml
   - ecCodes
+  - geos # to resolve isce2 issue
   - hyp3lib=1.4.1
   - hyp3_sdk
   - ipympl==0.8.8
-  - isce2
+  - isce2 # source of error
   - joblib
   - jupyter
   - kernda
+  - libgdal # to resolve isce2 issue
   - lxml
   - matplotlib
   - netcdf4
@@ -35,6 +37,8 @@ dependencies:
   - pyproj
   - pyresample
   - pyrocko
+  - qt # to resolve isce2 issue
+  # - qtconsole # to resolve isce2 issue
   - scikit-image
   - scipy
   - shapely
@@ -43,7 +47,6 @@ dependencies:
   - xarray
   - zarr
   - pip:
-    - geos # addition
     - git+https://github.com/pyrocko/kite
     - h5py<3
     - ipynb

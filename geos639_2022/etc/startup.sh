@@ -22,6 +22,23 @@ export PATH=$HOME/.local/bin:$PATH
 # Pull in any repos you would like cloned to user volumes
 gitpuller https://github.com/uafgeoteach/GEOS639-InSARGeoImaging.git main $HOME/GEOS639
 
+# CONDARC=$HOME/.condarc
+# if ! test -f "$CONDARC"; then
+# cat <<EOT >> $CONDARC
+# channels:
+#   - conda-forge
+#   - defaults
+# channel_priority: strict
+# create_default_packages:
+#   - jupyter
+#   - kernda
+# envs_dirs:
+#   - /home/jovyan/.local/envs
+#   - /opt/conda/envs
+# EOT
+# fi
+
+# THIS IS IT! it installs isce2
 CONDARC=$HOME/.condarc
 if ! test -f "$CONDARC"; then
 cat <<EOT >> $CONDARC
@@ -29,9 +46,6 @@ channels:
   - conda-forge
   - defaults
 channel_priority: strict
-create_default_packages:
-  - jupyter
-  - kernda
 envs_dirs:
   - /home/jovyan/.local/envs
   - /opt/conda/envs
@@ -63,6 +77,7 @@ if [ ! -d "$PREFIX" ]; then
 # if [ ! "$PREFIX" ]; then
   echo "mamba create"
   mamba env create -f "$ENVS"/"$NAME".yml -q
+  # sekts kernel by kernda
   mamba run -n "$NAME" kernda --display-name "$NAME" -o --env-dir "$PREFIX" "$PREFIX"/share/jupyter/kernels/python3/kernel.json
 else
   echo "mamba update"
@@ -176,8 +191,10 @@ jq '. += {"CondaKernelSpecManager": {"name_format": "{display_name}", "env_filte
 mv temp "$JN_CONFIG";
 fi
 
+# take out inverse
 BASH_RC=/home/jovyan/.bashrc
-grep -qxF 'conda activate inverse' $BASH_RC || echo 'conda activate inverse' >> $BASH_RC
+# grep -qxF 'conda activate inverse' $BASH_RC || echo 'conda activate inverse' >> $BASH_RC
+grep -qxF 'conda activate unavco' $BASH_RC || echo 'conda activate unavco' >> $BASH_RC
 
 BASH_PROFILE=$HOME/.bash_profile
 if ! test -f "$BASH_PROFILE"; then
