@@ -5,6 +5,8 @@ channels:
 dependencies:
   - python>=3.6,<3.9
   # - python>=3.7,<3.9
+  # - awscli # addition from docker
+  # - bokeh==2.3.1 # addition from docker
   - boto3
   - cartopy
   - cdsapi
@@ -14,7 +16,7 @@ dependencies:
   - dask-jobqueue>=0.3
   - defusedxml
   - ecCodes
-  - geos # to resolve isce2 issue
+  # - geos # to resolve isce2 issue
   - hyp3lib=1.4.1
   - hyp3_sdk
   - ipympl==0.8.8
@@ -22,7 +24,7 @@ dependencies:
   - joblib
   - jupyter
   - kernda
-  - libgdal # to resolve isce2 issue
+  # - libgdal # to resolve isce2 issue
   - lxml
   - matplotlib
   - netcdf4
@@ -37,7 +39,8 @@ dependencies:
   - pyproj
   - pyresample
   - pyrocko
-  - qt # to resolve isce2 issue
+  # - pyyaml==5.4.1 # addition from docker
+  # - qt # to resolve isce2 issue
   # - qtconsole # to resolve isce2 issue
   - scikit-image
   - scipy

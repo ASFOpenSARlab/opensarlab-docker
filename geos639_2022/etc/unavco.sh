@@ -3,13 +3,13 @@ set -e
 
 # Assume gitpuller already installed
 
-PATH=$HOME/.local/bin:$PATH
+# PATH=$HOME/.local/bin:$PATH
 
-############### Copy to .local/envs ###############
-LOCAL="$HOME"/.local
-NAME=unavco
-SITE_PACKAGES="$LOCAL/envs/$NAME/lib/python3.8/site-packages"
-##############################################################
+# ############### Copy to .local/envs ###############
+# LOCAL="$HOME"/.local
+# NAME=unavco
+# SITE_PACKAGES="$LOCAL/envs/$NAME/lib/python3.8/site-packages"
+# ##############################################################
 
 #conda run -n "$NAME" kernda --display-name $NAME $LOCAL/envs/$NAME/share/jupyter/kernels/python3/kernel.json -o
 

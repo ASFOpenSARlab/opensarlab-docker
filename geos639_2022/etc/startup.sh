@@ -84,13 +84,10 @@ else
   mamba env update -f "$ENVS"/"$NAME".yml -q
 fi
 
-
-echo "\nAfter MAMBA CREATE\n"
-
 ################ unavco.sh should start from here: ###################
 
 ## don't need this if below works. remember, this is ran in container
-# source unavco.sh
+source ${GEO_FILE}/unavco.sh
 
 # # from unavco.sh
 # pythonpath="$PYTHONPATH"
@@ -181,7 +178,7 @@ echo "\nAfter MAMBA CREATE\n"
 # fi
 
 
-echo "\nmamba clean\n"
+# echo "\nmamba clean\n"
 
 mamba clean --yes --all
 
@@ -205,7 +202,17 @@ fi
 EOT
 fi
 
-python -m pip install df-jupyter-magic
-cat <<EOT > "$HOME"/.ipython/profile_default/ipython_config.py
-c.InteractiveShellApp.extensions = ['df_jupyter_magic']
-EOT
+# python -m pip install df-jupyter-magic
+# cat <<EOT >> "$HOME"/.ipython/profile_default/ipython_config.py 
+# c.InteractiveShellApp.extensions = ['df_jupyter_magic']
+# EOT
+
+# PY_CONFIG="$HOME"/.ipython/profile_default/
+# if [ ! -d "$PY_CONFIG" ]; then
+#   mkdir -p "$PY_CONFIG"
+
+#   cat <<EOT >> "$HOME"/.ipython/profile_default/ipython_config.py 
+#   c.InteractiveShellApp.extensions = ['df_jupyter_magic']
+# EOT
+
+# fi

@@ -52,7 +52,8 @@ RUN pip install --upgrade nbconvert
 # Downgrade tornado otherwise the notebook can't connect to the notebook server. https://github.com/jupyter/notebook/issues/2664#issuecomment-468954423
 # RUN pip install tornado==5.1.1  # 4.5.3
 RUN pip install tornado==4.5.3 \ 
-    url-widget
+    url-widget \
+    awscli
 
 # # Install conda and mamba
 RUN conda install conda=4.12.0 && \
@@ -67,7 +68,7 @@ RUN mamba install -c conda-forge jupyter_contrib_nbextensions=0.5.1 \
     nb_conda_kernels \
     jupyterlab \ 
     # ipympl -y \
-    ipympl \
+    ipympl==0.8.8 \
     mamba_gator
 
 # env - unavco
@@ -101,11 +102,11 @@ RUN conda init
 # new addition - copy .sh into docker
 COPY etc/pull.py ${GEO_FILE}/pull.py 
 COPY etc/startup.sh ${GEO_FILE}/startup.sh
+COPY etc/unavco.sh ${GEO_FILE}/unavco.sh
 
-# permission error - resolved with changing /home/ dir permission setting
 USER jovyan
 
 EXPOSE 8888
-# ENTRYPOINT jupyter lab --no-browser --allow-root
 
+# ENTRYPOINT jupyter lab --no-browser --allow-root
 ENTRYPOINT bash ${GEO_FILE}/startup.sh; jupyter lab --no-browser --allow-root
