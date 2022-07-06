@@ -87,7 +87,7 @@ fi
 ################ unavco.sh should start from here: ###################
 
 ## don't need this if below works. remember, this is ran in container
-source ${GEO_FILE}/unavco.sh
+# source ${GEO_FILE}/unavco.sh
 
 # # from unavco.sh
 # pythonpath="$PYTHONPATH"
@@ -178,7 +178,7 @@ source ${GEO_FILE}/unavco.sh
 # fi
 
 
-# echo "\nmamba clean\n"
+echo "mamba clean"
 
 mamba clean --yes --all
 
@@ -188,11 +188,11 @@ jq '. += {"CondaKernelSpecManager": {"name_format": "{display_name}", "env_filte
 mv temp "$JN_CONFIG";
 fi
 
-# take out inverse
+
 BASH_RC=/home/jovyan/.bashrc
-# grep -qxF 'conda activate inverse' $BASH_RC || echo 'conda activate inverse' >> $BASH_RC
 grep -qxF 'conda activate unavco' $BASH_RC || echo 'conda activate unavco' >> $BASH_RC
 
+# bash profile has dup in unavco.sh
 BASH_PROFILE=$HOME/.bash_profile
 if ! test -f "$BASH_PROFILE"; then
 cat <<EOT > $BASH_PROFILE
