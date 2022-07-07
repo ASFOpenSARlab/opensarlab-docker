@@ -105,12 +105,12 @@ EOT
 fi
 
 
-JN_CONFIG=$HOME/.jupyter/jupyter_notebook_config.json
-if ! grep -q "\"CondaKernelSpecManager\":" "$JN_CONFIG"; then
-jq '. += {"CondaKernelSpecManager": {"name_format": "{display_name}", "env_filter": ".*opt/conda.*"}}' "$JN_CONFIG" >> temp;
-mv temp "$JN_CONFIG";
-fi
+# JN_CONFIG=$HOME/.jupyter/jupyter_notebook_config.json
+# if ! grep -q "\"CondaKernelSpecManager\":" "$JN_CONFIG"; then
+# jq '. += {"CondaKernelSpecManager": {"name_format": "{display_name}", "env_filter": ".*opt/conda.*"}}' "$JN_CONFIG" >> temp;
+# mv temp "$JN_CONFIG";
+# fi
 
 
-BASH_RC=/home/jovyan/.bashrc
-grep -qxF 'conda activate unavco' $BASH_RC || echo 'conda activate unavco' >> $BASH_RC
+# BASH_RC=/home/jovyan/.bashrc
+# grep -qxF 'conda activate unavco' $BASH_RC || echo 'conda activate unavco' >> $BASH_RC

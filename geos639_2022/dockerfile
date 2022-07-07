@@ -76,7 +76,6 @@ ENV GEO_FILE /etc/unavco
 RUN mkdir $GEO_FILE && \
     chmod -R 777 /etc/unavco/
 
-# this may fail
 # Make sure that any files in the home directory are jovyan permission
 RUN chown -R jovyan:users $HOME/
 
@@ -108,5 +107,4 @@ USER jovyan
 
 EXPOSE 8888
 
-# ENTRYPOINT jupyter lab --no-browser --allow-root
 ENTRYPOINT bash ${GEO_FILE}/startup.sh; jupyter lab --no-browser --allow-root
