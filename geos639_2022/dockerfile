@@ -67,7 +67,6 @@ RUN mamba install -c conda-forge jupyter_contrib_nbextensions=0.5.1 \
     jupyter-resource-usage \
     nb_conda_kernels \
     jupyterlab \ 
-    # ipympl -y \
     ipympl==0.8.8 \
     mamba_gator
 

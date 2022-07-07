@@ -22,23 +22,6 @@ export PATH=$HOME/.local/bin:$PATH
 # Pull in any repos you would like cloned to user volumes
 gitpuller https://github.com/uafgeoteach/GEOS639-InSARGeoImaging.git main $HOME/GEOS639
 
-# CONDARC=$HOME/.condarc
-# if ! test -f "$CONDARC"; then
-# cat <<EOT >> $CONDARC
-# channels:
-#   - conda-forge
-#   - defaults
-# channel_priority: strict
-# create_default_packages:
-#   - jupyter
-#   - kernda
-# envs_dirs:
-#   - /home/jovyan/.local/envs
-#   - /opt/conda/envs
-# EOT
-# fi
-
-# THIS IS IT! it installs isce2
 CONDARC=$HOME/.condarc
 if ! test -f "$CONDARC"; then
 cat <<EOT >> $CONDARC
@@ -68,10 +51,6 @@ SITE_PACKAGES=$PREFIX"/lib/python3."$v"/site-packages"
 # SITE_PACKAGES="$LOCAL/envs/$NAME/lib/python3."$v"/site-packages" 
 ##############################################################
 
-
-# CURRENT=$(pwd)/.local/envs/unavco.yml
-# ls -la "$CURRENT"
-
 echo "$PREFIX"
 if [ ! -d "$PREFIX" ]; then
 # if [ ! "$PREFIX" ]; then
@@ -90,17 +69,6 @@ source ${GEO_FILE}/unavco.sh
 
 ################ back to startup.sh original ################### 
 
-# # Create unavco env
-# if [ ! -d "$PREFIX" ]; then
-#   echo "mamba create"
-#   mamba env create -f "$ENVS"/"$NAME".yml -q
-#   mamba run -n "$NAME" kernda --display-name "$NAME" -o --env-dir "$PREFIX" "$PREFIX"/share/jupyter/kernels/python3/kernel.json
-# else
-#   echo "mamba update"
-#   mamba env update -f "$ENVS"/"$NAME".yml -q
-# fi
-
-
 echo "mamba clean"
 
 mamba clean --yes --all
@@ -110,7 +78,6 @@ if ! grep -q "\"CondaKernelSpecManager\":" "$JN_CONFIG"; then
 jq '. += {"CondaKernelSpecManager": {"name_format": "{display_name}", "env_filter": ".*opt/conda.*"}}' "$JN_CONFIG" >> temp;
 mv temp "$JN_CONFIG";
 fi
-
 
 BASH_RC=/home/jovyan/.bashrc
 grep -qxF 'conda activate unavco' $BASH_RC || echo 'conda activate unavco' >> $BASH_RC
@@ -124,6 +91,8 @@ grep -qxF 'conda activate unavco' $BASH_RC || echo 'conda activate unavco' >> $B
 # fi
 # EOT
 # fi
+
+################ pass df-jupyter-magic for now ################
 
 # python -m pip install df-jupyter-magic
 # cat <<EOT >> "$HOME"/.ipython/profile_default/ipython_config.py 

@@ -10,9 +10,6 @@ set -e
 # NAME=unavco
 # SITE_PACKAGES="$LOCAL/envs/$NAME/lib/python3.8/site-packages"
 # ##############################################################
-
-printf "Start unavco.sh\n"
-
 conda run -n "$NAME" kernda --display-name $NAME $LOCAL/envs/$NAME/share/jupyter/kernels/python3/kernel.json -o
 
 # pythonpath="$PYTHONPATH"
@@ -20,7 +17,6 @@ conda run -n "$NAME" kernda --display-name $NAME $LOCAL/envs/$NAME/share/jupyter
 
 ######## Set ISCE env vars ########
 
-printf "Set ISCE env\n"
 # # start building local path and pythonpath variables
 # pythonpath=$SITE_PACKAGES/isce:"$pythonpath"
 # path="$SITE_PACKAGES"/isce/applications:"$LOCAL"/envs/"$NAME"/bin:$path
@@ -29,8 +25,6 @@ printf "Set ISCE env\n"
 conda env config vars set -n $NAME ISCE_HOME="$SITE_PACKAGES"/isce
 
 ######## Install MintPy ########
-
-printf "Install MintPy\n"
 
 MINTPY_HOME="$LOCAL"/MintPy
 PYAPS_HOME="$LOCAL"/PyAPS
@@ -44,22 +38,18 @@ conda env config vars set -n $NAME PYAPS_HOME="$PYAPS_HOME"
 # pythonpath="$MINTPY_HOME":"$PYAPS_HOME":"$pythonpath"
 
 # clone MintPy
-printf "cloning MintPy"
 if [ ! -d "$MINTPY_HOME" ]
 then
     git clone -b v1.3.1 --depth=1 --single-branch https://github.com/insarlab/MintPy.git "$MINTPY_HOME"
 fi
 
 # clone pyaps
-printf "cloning pyaps"
 if [ ! -d "$PYAPS_HOME" ]
 then
     git clone -b main --depth=1 --single-branch https://github.com/yunjunz/PyAPS.git "$PYAPS_HOME"
 fi
 
 ######## Install ARIA-Tools ########
-
-printf "ARIA-Tools"
 
 # clone the ARIA-Tools repo and build ARIA-Tools
 aria="$LOCAL/ARIA-tools"
@@ -88,13 +78,11 @@ fi
 
 #######################
 
-printf "set path\n"
 # # set PATH and PYTHONPATH
 # conda env config vars set -n $NAME PYTHONPATH="$pythonpath"
 # conda env config vars set -n $NAME PATH="$path"
 
 
-printf "bash profile\n"
 BASH_PROFILE=$HOME/.bash_profile
 if ! test -f "$BASH_PROFILE"; then
 cat <<EOT >> $BASH_PROFILE
