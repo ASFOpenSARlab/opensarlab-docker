@@ -51,6 +51,7 @@ RUN pip install --upgrade nbconvert
 
 # Downgrade tornado otherwise the notebook can't connect to the notebook server. https://github.com/jupyter/notebook/issues/2664#issuecomment-468954423
 # RUN pip install tornado==5.1.1  # 4.5.3
+# RUN pip install tornado \ 
 RUN pip install tornado==4.5.3 \ 
     url-widget \
     awscli
@@ -106,4 +107,6 @@ USER jovyan
 
 EXPOSE 8888
 
-ENTRYPOINT bash ${GEO_FILE}/startup.sh; jupyter lab --no-browser --allow-root
+# --allow-root will resolve outdated tornado issue?
+ENTRYPOINT bash ${GEO_FILE}/startup.sh; jupyter lab --no-browser 
+    # --allow-root --NotebookApp.kernel_manager_class=notebook.services.kernels.kernelmanager.AsyncMappingKernelManager

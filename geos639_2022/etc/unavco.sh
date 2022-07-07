@@ -4,6 +4,7 @@ set -e
 # Assume gitpuller already installed
 
 # PATH=$HOME/.local/bin:$PATH
+# printf "$PATH"
 
 # ############### Copy to .local/envs ###############
 # LOCAL="$HOME"/.local
@@ -14,6 +15,8 @@ conda run -n "$NAME" kernda --display-name $NAME $LOCAL/envs/$NAME/share/jupyter
 
 # pythonpath="$PYTHONPATH"
 # path="$PATH"
+# printf "$pythonpath"
+# printf "$path"
 
 ######## Set ISCE env vars ########
 
@@ -63,8 +66,7 @@ then
     cd "$wd"
 fi
 
-# path="$LOCAL/ARIA-tools/tools/bin:$LOCAL/ARIA-tools/tools/ARIAtools:"$path
-# pythonpath="$LOCAL/ARIA-tools/tools:$LOCAL/ARIA-tools/tools/ARIAtools:"$pythonpath
+
 conda env config vars set -n $NAME GDAL_HTTP_COOKIEFILE=/tmp/cookies.txt
 conda env config vars set -n $NAME GDAL_HTTP_COOKIEJAR=/tmp/cookies.txt
 conda env config vars set -n $NAME VSI_CACHE=YES
@@ -83,14 +85,14 @@ fi
 # conda env config vars set -n $NAME PATH="$path"
 
 
-BASH_PROFILE=$HOME/.bash_profile
-if ! test -f "$BASH_PROFILE"; then
-cat <<EOT >> $BASH_PROFILE
-if [ -s ~/.bashrc ]; then
-    source ~/.bashrc;
-fi
-EOT
-fi
+# BASH_PROFILE=$HOME/.bash_profile
+# if ! test -f "$BASH_PROFILE"; then
+# cat <<EOT >> $BASH_PROFILE
+# if [ -s ~/.bashrc ]; then
+#     source ~/.bashrc;
+# fi
+# EOT
+# fi
 
 
 # JN_CONFIG=$HOME/.jupyter/jupyter_notebook_config.json

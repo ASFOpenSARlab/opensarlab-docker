@@ -48,7 +48,11 @@ NAME=unavco
 PREFIX="$ENVS"/"$NAME" # /home/jovyan/.local/envs/unavco
 SITE_PACKAGES=$PREFIX"/lib/python3."$v"/site-packages"
 ## from unavco.sh
+# LOCAL="$HOME"/.local
+# NAME=unavco
 # SITE_PACKAGES="$LOCAL/envs/$NAME/lib/python3."$v"/site-packages" 
+# PREFIX="$ENVS"/"$NAME" # /home/jovyan/.local/envs/unavco
+# SITE_PACKAGES=$PREFIX"/lib/python3."$v"/site-packages"
 ##############################################################
 
 echo "$PREFIX"
@@ -56,7 +60,6 @@ if [ ! -d "$PREFIX" ]; then
 # if [ ! "$PREFIX" ]; then
   echo "mamba create"
   mamba env create -f "$ENVS"/"$NAME".yml -q
-  # sekts kernel by kernda
   mamba run -n "$NAME" kernda --display-name "$NAME" -o --env-dir "$PREFIX" "$PREFIX"/share/jupyter/kernels/python3/kernel.json
 else
   echo "mamba update"
@@ -65,7 +68,7 @@ fi
 
 ################ unavco.sh should start from here: ###################
 
-source ${GEO_FILE}/unavco.sh
+# source ${GEO_FILE}/unavco.sh
 
 ################ back to startup.sh original ################### 
 
@@ -82,15 +85,15 @@ fi
 BASH_RC=/home/jovyan/.bashrc
 grep -qxF 'conda activate unavco' $BASH_RC || echo 'conda activate unavco' >> $BASH_RC
 
-# # bash profile has dup in unavco.sh
-# BASH_PROFILE=$HOME/.bash_profile
-# if ! test -f "$BASH_PROFILE"; then
-# cat <<EOT > $BASH_PROFILE
-# if [ -s ~/.bashrc ]; then
-#     source ~/.bashrc;
-# fi
-# EOT
-# fi
+# bash profile has dup in unavco.sh
+BASH_PROFILE=$HOME/.bash_profile
+if ! test -f "$BASH_PROFILE"; then
+cat <<EOT > $BASH_PROFILE
+if [ -s ~/.bashrc ]; then
+    source ~/.bashrc;
+fi
+EOT
+fi
 
 ################ pass df-jupyter-magic for now ################
 
