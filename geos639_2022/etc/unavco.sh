@@ -1,10 +1,10 @@
 #!/bin/bash
+
 set -e
 
 # Assume gitpuller already installed
 
-# PATH=$HOME/.local/bin:$PATH
-# printf "$PATH"
+PATH=$HOME/.local/bin:$PATH
 
 # ############### Copy to .local/envs ###############
 # LOCAL="$HOME"/.local
@@ -13,46 +13,46 @@ set -e
 # ##############################################################
 conda run -n "$NAME" kernda --display-name $NAME $LOCAL/envs/$NAME/share/jupyter/kernels/python3/kernel.json -o
 
-# pythonpath="$PYTHONPATH"
-# path="$PATH"
-# printf "$pythonpath"
-# printf "$path"
+pythonpath="$PYTHONPATH"
+path="$PATH"
+printf "$pythonpath"
+printf "$path"
 
-######## Set ISCE env vars ########
+####### Set ISCE env vars ########
 
-# # start building local path and pythonpath variables
-# pythonpath=$SITE_PACKAGES/isce:"$pythonpath"
-# path="$SITE_PACKAGES"/isce/applications:"$LOCAL"/envs/"$NAME"/bin:$path
+# start building local path and pythonpath variables
+pythonpath=$SITE_PACKAGES/isce:"$pythonpath"
+path="$SITE_PACKAGES"/isce/applications:"$LOCAL"/envs/"$NAME"/bin:$path
 
 # set ISCE_HOME
 conda env config vars set -n $NAME ISCE_HOME="$SITE_PACKAGES"/isce
 
-######## Install MintPy ########
+# ####### Install MintPy ########
 
-MINTPY_HOME="$LOCAL"/MintPy
-PYAPS_HOME="$LOCAL"/PyAPS
+# MINTPY_HOME="$LOCAL"/MintPy
+# PYAPS_HOME="$LOCAL"/PyAPS
 
-# set MintPy env variables
-conda env config vars set -n $NAME MINTPY_HOME="$MINTPY_HOME"
-conda env config vars set -n $NAME PYAPS_HOME="$PYAPS_HOME"
+# # set MintPy env variables
+# conda env config vars set -n $NAME MINTPY_HOME="$MINTPY_HOME"
+# conda env config vars set -n $NAME PYAPS_HOME="$PYAPS_HOME"
 
 # #update local path and pythonpath variables
 # path="$MINTPY_HOME"/mintpy:"$path"
 # pythonpath="$MINTPY_HOME":"$PYAPS_HOME":"$pythonpath"
 
-# clone MintPy
-if [ ! -d "$MINTPY_HOME" ]
-then
-    git clone -b v1.3.1 --depth=1 --single-branch https://github.com/insarlab/MintPy.git "$MINTPY_HOME"
-fi
+# # clone MintPy
+# if [ ! -d "$MINTPY_HOME" ]
+# then
+#     git clone -b v1.3.1 --depth=1 --single-branch https://github.com/insarlab/MintPy.git "$MINTPY_HOME"
+# fi
 
-# clone pyaps
-if [ ! -d "$PYAPS_HOME" ]
-then
-    git clone -b main --depth=1 --single-branch https://github.com/yunjunz/PyAPS.git "$PYAPS_HOME"
-fi
+# # clone pyaps
+# if [ ! -d "$PYAPS_HOME" ]
+# then
+#     git clone -b main --depth=1 --single-branch https://github.com/yunjunz/PyAPS.git "$PYAPS_HOME"
+# fi
 
-######## Install ARIA-Tools ########
+####### Install ARIA-Tools ########
 
 # clone the ARIA-Tools repo and build ARIA-Tools
 aria="$LOCAL/ARIA-tools"
@@ -78,11 +78,11 @@ then
     git clone -b master --depth=1 --single-branch https://github.com/aria-tools/ARIA-tools-docs.git $aria_docs
 fi
 
-#######################
+######################
 
-# # set PATH and PYTHONPATH
-# conda env config vars set -n $NAME PYTHONPATH="$pythonpath"
-# conda env config vars set -n $NAME PATH="$path"
+# set PATH and PYTHONPATH
+conda env config vars set -n $NAME PYTHONPATH="$pythonpath"
+conda env config vars set -n $NAME PATH="$path"
 
 
 # BASH_PROFILE=$HOME/.bash_profile

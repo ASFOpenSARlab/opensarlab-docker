@@ -46,13 +46,13 @@ LOCAL="$HOME"/.local
 ENVS="$LOCAL"/envs
 NAME=unavco
 PREFIX="$ENVS"/"$NAME" # /home/jovyan/.local/envs/unavco
-SITE_PACKAGES=$PREFIX"/lib/python3."$v"/site-packages"
+# SITE_PACKAGES=$PREFIX"/lib/python3."$v"/site-packages"
 ## from unavco.sh
 # LOCAL="$HOME"/.local
 # NAME=unavco
 # SITE_PACKAGES="$LOCAL/envs/$NAME/lib/python3."$v"/site-packages" 
 # PREFIX="$ENVS"/"$NAME" # /home/jovyan/.local/envs/unavco
-# SITE_PACKAGES=$PREFIX"/lib/python3."$v"/site-packages"
+SITE_PACKAGES=$PREFIX"/lib/python3."$v"/site-packages"
 ##############################################################
 
 echo "$PREFIX"
@@ -61,6 +61,7 @@ if [ ! -d "$PREFIX" ]; then
   echo "mamba create"
   mamba env create -f "$ENVS"/"$NAME".yml -q
   mamba run -n "$NAME" kernda --display-name "$NAME" -o --env-dir "$PREFIX" "$PREFIX"/share/jupyter/kernels/python3/kernel.json
+  source ${GEO_FILE}/unavco.sh
 else
   echo "mamba update"
   mamba env update -f "$ENVS"/"$NAME".yml -q
