@@ -6,22 +6,22 @@ set -e
 
 PATH=$HOME/.local/bin:$PATH
 
-# ############### Copy to .local/envs ###############
-# LOCAL="$HOME"/.local
-# NAME=unavco
-# SITE_PACKAGES="$LOCAL/envs/$NAME/lib/python3.8/site-packages"
-# ##############################################################
-conda run -n "$NAME" kernda --display-name $NAME $LOCAL/envs/$NAME/share/jupyter/kernels/python3/kernel.json -o
+############### Copy to .local/envs ###############
+LOCAL="$HOME"/.local
+NAME=unavco
+SITE_PACKAGES="$LOCAL/envs/$NAME/lib/python3.8/site-packages"
+##############################################################
+# conda run -n "$NAME" kernda --display-name $NAME $LOCAL/envs/$NAME/share/jupyter/kernels/python3/kernel.json -o
 
-pythonpath="$PYTHONPATH"
+# pythonpath="$PYTHONPATH"
 path="$PATH"
-printf "$pythonpath"
-printf "$path"
+# printf "$pythonpath"
+# printf "$path"
 
 ####### Set ISCE env vars ########
 
 # start building local path and pythonpath variables
-pythonpath=$SITE_PACKAGES/isce:"$pythonpath"
+# pythonpath=$SITE_PACKAGES/isce:"$pythonpath"
 path="$SITE_PACKAGES"/isce/applications:"$LOCAL"/envs/"$NAME"/bin:$path
 
 # set ISCE_HOME
@@ -81,7 +81,7 @@ fi
 ######################
 
 # set PATH and PYTHONPATH
-conda env config vars set -n $NAME PYTHONPATH="$pythonpath"
+# conda env config vars set -n $NAME PYTHONPATH="$pythonpath"
 conda env config vars set -n $NAME PATH="$path"
 
 
