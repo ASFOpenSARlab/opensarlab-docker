@@ -13,7 +13,7 @@ dependencies:
   - dask-jobqueue>=0.3
   - defusedxml
   - ecCodes
-  - hyp3lib=1.4.1
+  - hyp3lib==1.4.1
   - hyp3_sdk
   - ipympl==0.8.8
   - isce2 
@@ -42,6 +42,7 @@ dependencies:
   - xarray
   - zarr
   - pip:
+    - df_jupyter_magic
     - git+https://github.com/pyrocko/kite
     - h5py<3
     - ipynb
