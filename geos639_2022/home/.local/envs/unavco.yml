@@ -48,3 +48,4 @@ dependencies:
     - mintpy
     - okada_wrapper
     - url-widget
+    - df-jupyter-magic
