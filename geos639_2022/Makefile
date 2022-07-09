@@ -15,4 +15,6 @@ clean:
 			home/.config home/work home/.local/ARIA-tools home/.local/MintPy \
 			home/.local/PyAPS home/ARIA-tools-docs home/.bash_profile home/.viminfo
 
-restart: clean all
+restart: 
+	rm -rf home/GEOS639
+	clean all

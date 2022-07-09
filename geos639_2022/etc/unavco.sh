@@ -4,23 +4,18 @@ set -e
 
 # Assume gitpuller already installed
 
-PATH=$HOME/.local/bin:$PATH
+#PATH=$HOME/.local/bin:$PATH
 
-# ############### Copy to .local/envs ###############
- LOCAL="$HOME"/.local
- NAME=unavco
- SITE_PACKAGES="$LOCAL/envs/$NAME/lib/python3.8/site-packages"
-# ##############################################################
+LOCAL="$HOME"/.local
+NAME=unavco
+SITE_PACKAGES="$LOCAL/envs/$NAME/lib/python3.8/site-packages"
 
 pythonpath="$PYTHONPATH"
 path="$PATH"
 
 ####### Set ISCE env vars ########
-
-# start building local path and pythonpath variables
-path="$SITE_PACKAGES"/isce/applications:"$LOCAL"/envs/"$NAME"/bin:$path
-
-# set ISCE_HOME
+pythonpath="$SITE_PACKAGES/isce:$pythonpath"
+path="$SITE_PACKAGES/isce/applications:$LOCAL/envs/$NAME/bin:$path"
 conda env config vars set -n $NAME ISCE_HOME="$SITE_PACKAGES"/isce
 
 ####### Install ARIA-Tools ########
@@ -48,7 +43,7 @@ then
     git clone -b master --depth=1 --single-branch https://github.com/aria-tools/ARIA-tools-docs.git $aria_docs
 fi
 
-######################
-
 # set PATH and PYTHONPATH
 conda env config vars set -n $NAME PATH="$path"
+conda env config vars set -n $NAME PYTHONPATH="$pythonpath"
+

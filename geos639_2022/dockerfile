@@ -107,6 +107,4 @@ USER jovyan
 
 EXPOSE 8888
 
-# --allow-root will resolve outdated tornado issue?
 ENTRYPOINT bash ${GEO_FILE}/startup.sh; jupyter lab --no-browser --allow-root
-#     --allow-root --NotebookApp.kernel_manager_class=notebook.services.kernels.kernelmanager.AsyncMappingKernelManager
