@@ -46,18 +46,11 @@ LOCAL="$HOME"/.local
 ENVS="$LOCAL"/envs
 NAME=unavco
 PREFIX="$ENVS"/"$NAME" # /home/jovyan/.local/envs/unavco
-# SITE_PACKAGES=$PREFIX"/lib/python3."$v"/site-packages"
-## from unavco.sh
-# LOCAL="$HOME"/.local
-# NAME=unavco
-# SITE_PACKAGES="$LOCAL/envs/$NAME/lib/python3."$v"/site-packages" 
-# PREFIX="$ENVS"/"$NAME" # /home/jovyan/.local/envs/unavco
 SITE_PACKAGES=$PREFIX"/lib/python3."$v"/site-packages"
 ##############################################################
 
 echo "$PREFIX"
 if [ ! -d "$PREFIX" ]; then
-# if [ ! "$PREFIX" ]; then
   echo "mamba create"
   mamba env create -f "$ENVS"/"$NAME".yml -q
   mamba run -n "$NAME" kernda --display-name "$NAME" -o --env-dir "$PREFIX" "$PREFIX"/share/jupyter/kernels/python3/kernel.json
@@ -66,10 +59,6 @@ else
   echo "mamba update"
   mamba env update -f "$ENVS"/"$NAME".yml -q
 fi
-
-################ unavco.sh should start from here: ###################
-
-# source ${GEO_FILE}/unavco.sh
 
 ################ back to startup.sh original ################### 
 
@@ -98,17 +87,8 @@ fi
 
 ################ pass df-jupyter-magic for now ################
 
-# python -m pip install df-jupyter-magic
-# cat <<EOT >> "$HOME"/.ipython/profile_default/ipython_config.py 
-# c.InteractiveShellApp.extensions = ['df_jupyter_magic']
-# EOT
-
-# PY_CONFIG="$HOME"/.ipython/profile_default/
-# if [ ! -d "$PY_CONFIG" ]; then
-#   mkdir -p "$PY_CONFIG"
-
-#   cat <<EOT >> "$HOME"/.ipython/profile_default/ipython_config.py 
-#   c.InteractiveShellApp.extensions = ['df_jupyter_magic']
-# EOT
-
-# fi
+python -m pip install df-jupyter-magic
+cat <<EOT > "$HOME"/.ipython/profile_default/ipython_config.py
+c.InteractiveShellApp.extensions = ['df_jupyter_magic']
+c.NotebookApp.kernel_manager_class = 'notebook.services.kernels.kernelmanager.AsyncMappingKernelManager'
+EOT
