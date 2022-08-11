@@ -1,0 +1,148 @@
+FROM jupyter/base-notebook:hub-1.4.2 as release
+
+# Base Stage ****************************************************************
+USER root
+WORKDIR /
+RUN set -ve
+
+RUN apt-get update && \
+    apt-get install --no-install-recommends -y \
+        software-properties-common \
+        git && \
+    add-apt-repository -y ppa:ubuntugis/ubuntugis-unstable && \
+    apt-get update && \
+    apt-get upgrade -y
+
+# COPY tests/* /tests/
+
+RUN apt-get install -y \
+    proj-bin \
+    geotiff-bin \
+    libshp-dev \
+    libshp2 \
+    libhdf5-dev \
+    libnetcdf-dev \
+    libgdal-dev \
+    libgsl-dev
+
+# # fail - second or third line due to diff version
+# RUN cp /usr/lib/x86_64-linux-gnu/libgeotiff.so.5 /usr/lib/x86_64-linux-gnu/libgeotiff.so.2 && \
+#     cp /usr/lib/libgdal.so /usr/lib/libgdal.so.20 && \
+#     # cp /usr/lib/x86_64-linux-gnu/libproj.so.* /usr/lib/x86_64-linux-gnu/libproj.so.12 && \
+#     cp /usr/lib/x86_64-linux-gnu/libproj.so.19 /usr/lib/x86_64-linux-gnu/libproj.so.12 && \
+#     cp /usr/lib/x86_64-linux-gnu/libhdf5_serial.so.103 /usr/lib/x86_64-linux-gnu/libhdf5_serial.so.100 && \
+#     cp /usr/lib/x86_64-linux-gnu/libnetcdf.so.15 /usr/lib/x86_64-linux-gnu/libnetcdf.so.13
+
+# Downgrade tornado otherwise the notebook can't connect to the notebook server. https://github.com/jupyter/notebook/issues/2664#issuecomment-468954423
+# RUN pip install tornado==5.1.1
+
+# Install general items. If a library is needed for a specific piece of software, put it with that software.
+RUN apt-get update && \
+    apt-get install --fix-missing --no-install-recommends -y \
+        zip \
+        unzip \
+        wget \
+        vim \
+        rsync \
+        less \
+        snaphu \
+        curl \
+        openssh-client \
+        libgl1-mesa-glx \
+        emacs \
+        gnupg2 \
+        jq \
+        gfortran
+
+# Install any other custom and jupyter libaries like widgets
+# Use pip (conda version) since we want to corner off GIAnT's work and also run it with Jupyter
+RUN conda update -n base conda mamba
+
+RUN mamba install -c conda-forge awscli boto3 pyyaml bokeh mamba_gator plotly
+
+RUN mamba install -c conda-forge jupyter_contrib_nbextensions \
+    jupyter-resource-usage nb_conda_kernels jupyterlab-spellchecker \
+    ipympl kernda
+
+RUN python -m pip install url-widget opensarlab-profile-label opensarlab-doc-link \
+    opensarlab_controlbtn opensarlab-notifications==0.1.4 opensarlab-theme-light
+
+# Make sure that any files in the home directory are jovyan permission
+# RUN chown -R jovyan:users /home/jovyan/
+RUN chown -R jovyan:users $HOME/
+
+# Add sudo group user 599 elevation
+RUN addgroup -gid 599 elevation \
+    && echo '%elevation ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers
+
+# Clean up a few other things at the end
+RUN apt-get update && \
+    rm -rf /var/lib/apt-get/lists/* && \
+    apt-get autoremove -y && \
+    conda clean --yes --all
+
+# Clean up a few other things at the end
+RUN apt-get update && \
+    rm -rf /var/lib/apt/lists/* && \
+    apt-get autoremove -y && \
+    conda clean --yes --all
+
+# Make sure mamba (within conda) has write access
+RUN chmod -R 777 /opt/conda/pkgs/
+
+# Set the default theme to opensarlab-theme-light to avoid issues with built-in light theme and status bar
+# Remove the logout option from the main menu to steer users to the hub control panel
+# Remove the launch classic notebook option to avoid broken classic terminals and image loading errors
+RUN SETTINGS=/opt/conda/share/jupyter/lab/settings && \
+    mkdir -p $SETTINGS && \
+    OVERRIDES=$SETTINGS/overrides.json && \
+    TEMP=$SETTINGS/temp && \
+    echo '{"@jupyterlab/apputils-extension:themes": {"theme": "opensarlab-theme-light"}}' > $OVERRIDES && \
+    jq '. += {"@jupyterlab/mainmenu-extension:plugin": {"menus": [{"id": "jp-mainmenu-file", "items": [{"command": "hub:logout", "disabled": true}]}]}}' $OVERRIDES > $TEMP && \
+    jq '.["@jupyterlab/mainmenu-extension:plugin"].menus[1] |= {"id": "jp-mainmenu-help", "items": [{"command": "help:launch-classic-notebook", "disabled": true}]}' $TEMP > $OVERRIDES && \
+    jq '. += {"jupyterlab-topbar-extension:plugin": {"order": ["spacer", "opensarlab_profile_label", "doc_link", "server-btn"]}}' $OVERRIDES > $TEMP && \
+    mv $TEMP $OVERRIDES
+
+RUN rm -rf /home/jovyan/..?* /home/jovyan/.[!.]* /home/jovyan/*
+WORKDIR /home/jovyan
+RUN conda init
+
+COPY env /etc/env
+# RUN chmod -R 755 /etc/env && \
+RUN chmod -R 777 /etc/env && \
+    chown -R jovyan:users /etc/env
+
+## NEED THIS
+ENV UNAVCO="unavco"
+RUN mamba env create -f /etc/env/unavco.yml && \
+    mamba run -n $UNAVCO kernda -o --display-name $UNAVCO /opt/conda/envs/$UNAVCO/share/jupyter/kernels/python3/kernel.json && \
+    source /etc/env/unavco_env.sh && \
+    mamba clean --yes --all && \
+    # chmod -R 755 /opt/conda/envs && \
+    chmod -R 777 /opt/conda/envs && \
+    chown -R jovyan:users /opt/conda/envs
+
+# works with docker run --user root 
+# RUN mamba env create -f /etc/env/unavco.yml && \
+#     mamba run -n $UNAVCO kernda -o --display-name $UNAVCO /opt/conda/envs/$UNAVCO/share/jupyter/kernels/python3/kernel.json && \
+#     chmod -R 777 /opt/conda/envs && \
+#     chown -R jovyan:users /opt/conda/envs && \
+#     mamba clean --yes --all && \
+#     source /etc/env/unavco_env.sh
+
+## works
+# RUN chmod -R 777 /opt/conda/envs && \
+#     chown -R jovyan:users /opt/conda/envs
+
+USER jovyan
+EXPOSE 8888
+
+# ENTRYPOINT bash ${UNAVCO_FILES}/startup.sh; jupyter notebook --no-browser --allow-root
+ENTRYPOINT jupyter lab --no-browser --allow-root
+
+##########################################
+
+# FROM release as testing 
+
+# RUN bash /tests/finale.sh
+# RUN bash /tests/unavco.sh
