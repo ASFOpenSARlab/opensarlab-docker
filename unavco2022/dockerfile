@@ -25,6 +25,8 @@ RUN apt-get install -y \
     libgdal-dev \
     libgsl-dev
 
+RUN python -m pip install pip==21.3.1
+
 # Downgrade tornado otherwise the notebook can't connect to the notebook server. https://github.com/jupyter/notebook/issues/2664#issuecomment-468954423
 # RUN pip install tornado==5.1.1
 
@@ -103,6 +105,8 @@ COPY env /etc/env
 # RUN chmod -R 777 /etc/env && \
 RUN chmod -R 755 /etc/env && \
     chown -R jovyan:users /etc/env
+
+RUN mkdir /aria
 
 ## NEED THIS
 ENV UNAVCO="unavco"
