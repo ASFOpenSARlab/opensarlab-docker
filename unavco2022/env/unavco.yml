@@ -16,13 +16,13 @@ dependencies:
   - hyp3lib=1.4.1
   - hyp3_sdk
   - ipympl==0.8.8
-  - isce2
+  - isce2==2.6.0
   - joblib
   - jupyter
   - kernda
   - lxml
   - matplotlib
-  - mintpy
+  - mintpy==1.4.1
   - netcdf4
   - numpy
   - openmp
@@ -43,9 +43,12 @@ dependencies:
   - xarray
   - zarr
   - pip:
-    - git+https://github.com/pyrocko/kite
+    # - git+https://github.com/pyrocko/kite
+    - okada_wrapper
+    - kite # pyrocko/kite
     - h5py<3
     - ipynb
-    - okada_wrapper
+    # - okada_wrapper
     - platemotion
+    - sardem
     - url-widget
