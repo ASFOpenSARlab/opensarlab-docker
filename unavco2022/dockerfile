@@ -103,7 +103,8 @@ RUN conda init
 
 COPY env /etc/env
 # RUN chmod -R 777 /etc/env && \
-RUN chmod -R 755 /etc/env && \
+# RUN chmod -R 755 /etc/env && \
+RUN chmod -R 777 /etc/env && \
     chown -R jovyan:users /etc/env
 
 RUN mkdir /aria
