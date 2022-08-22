@@ -1,0 +1,13 @@
+**
+!home
+!home/.local
+!home/.local/envs
+!home/.local/envs/unavco.yml
+!dockerfile
+!.gitignore
+!.dockerignore
+!etc/
+!etc/**
+!README.md
+!img/
+!img/**
