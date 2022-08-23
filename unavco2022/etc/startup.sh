@@ -2,43 +2,52 @@
 
 set -ex
 
+# echo /
+
+mv -v /Geo-SInC $HOME
+mv -v /conda_environments $HOME 
+
 # python -m pip install --user \
 #     ipywidgets \
 #     mpldatacursor
 
-python -m pip install --user \
-    ipywidgets \
-    mpldatacursor \
-    nbgitpuller \
-    # rise \
-    # hide_code \
-    # jupyter_nbextensions_configurator
+# python -m pip install --user \
+#     ipywidgets \
+#     mpldatacursor \
+#     nbgitpuller \
+#     rise \
+#     # hide_code \
+#     jupyter_nbextensions_configurator
 
-# conda install -c conda-forge jupyter_client=7.1.0 jupyter_server=1.13.1  --force-reinstall
+# # conda install -c conda-forge jupyter_client=7.1.0 jupyter_server=1.13.1  --force-reinstall
 
 # python=$(python --version 2>&1)
 # v=$(echo $python | cut -d'.' -f 2)
 
-############# pull.py ##############################
-python -m pip install --user nbgitpuller
+# ############# pull.py ##############################
+# python -m pip install --user nbgitpuller
 
-# copy over our version of pull.py
-# REMINDER: REMOVE IF CHANGES ARE MERGED TO NBGITPULLER
-cp "${UNAVCO_FILES}"/pull.py /home/jovyan/.local/lib/python3.9/site-packages/nbgitpuller/pull.py
+# # copy over our version of pull.py
+# # REMINDER: REMOVE IF CHANGES ARE MERGED TO NBGITPULLER
+# cp "${UNAVCO_FILES}"/pull.py /home/jovyan/.local/lib/python3.9/site-packages/nbgitpuller/pull.py
 
-# Disable the extension manager in Jupyterlab since server extensions are uninstallable
-# by users and non-server extension installs do not persist over server restarts
-jupyter labextension disable @jupyterlab/extensionmanager-extension
+# # Disable the extension manager in Jupyterlab since server extensions are uninstallable
+# # by users and non-server extension installs do not persist over server restarts
+# jupyter labextension disable @jupyterlab/extensionmanager-extension
 
-mkdir -p $HOME/.ipython/profile_default/startup/
-cp "${UNAVCO_FILES}"/00-df.py $HOME/.ipython/profile_default/startup/00-df.py
+# mkdir -p $HOME/.ipython/profile_default/startup/
+# # cp "${UNAVCO_FILES}"/00-df.py $HOME/.ipython/profile_default/startup/00-df.py
 
-gitpuller https://github.com/parosen/Geo-SInC.git main $HOME/Geo-SInC
+# # gitpuller https://github.com/parosen/Geo-SInC.git main $HOME/Geo-SInC
 
-gitpuller https://github.com/ASFOpenSARlab/opensarlab-envs.git main $HOME/conda_environments
+# # gitpuller https://github.com/ASFOpenSARlab/opensarlab-envs.git main $HOME/conda_environments
+
+# gitpuller https://github.com/parosen/Geo-SInC.git
+
+# gitpuller https://github.com/ASFOpenSARlab/opensarlab-envs.git
 
 
-####################################################
+# ####################################################
 
 # # Add Path to local pip execs.
 # export PATH=$HOME/.local/bin:$PATH
@@ -76,17 +85,15 @@ gitpuller https://github.com/ASFOpenSARlab/opensarlab-envs.git main $HOME/conda_
 #   mamba env create -f "$ENVS"/"$NAME".yml -q
 
 #   mamba run -n "$NAME" kernda --display-name "$NAME" -o --env-dir "$PREFIX" "$PREFIX"/share/jupyter/kernels/python3/kernel.json
-#   source ${GEO_FILE}/unavco_env.sh
+#   source ${UNAVCO_FILES}/unavco_env.sh
 # else
 #   echo "mamba update"
 #   mamba env update -f "$ENVS"/"$NAME".yml -q
 # fi
 
-# ################ back to startup.sh original ################### 
+# # echo "mamba clean"
 
-# echo "mamba clean"
-
-# mamba clean --yes --all
+# # mamba clean --yes --all
 
 # # check if config file exists
 # JN_CONFIG=$HOME/.jupyter/jupyter_notebook_config.json
@@ -116,14 +123,14 @@ gitpuller https://github.com/ASFOpenSARlab/opensarlab-envs.git main $HOME/conda_
 # EOT
 # fi
 
-# python -m pip install df-jupyter-magic
+python -m pip install df-jupyter-magic
 
-# if [ ! -f "$HOME/.jupyter/jupyter_lab_config.py" ]; then
-# cat <<EOT > "$HOME"/.jupyter/jupyter_lab_config.py
-# c.InteractiveShellApp.extensions = ['df_jupyter_magic']
-# c.NotebookApp.kernel_manager_class = ['notebook.services.kernels.kernelmanager.AsyncMappingKernelManager']
-# EOT
-# fi
+if [ ! -f "$HOME/.jupyter/jupyter_lab_config.py" ]; then
+cat <<EOT > "$HOME"/.jupyter/jupyter_lab_config.py
+c.InteractiveShellApp.extensions = ['df_jupyter_magic']
+c.NotebookApp.kernel_manager_class = ['notebook.services.kernels.kernelmanager.AsyncMappingKernelManager']
+EOT
+fi
 
 
 #############################################################################
