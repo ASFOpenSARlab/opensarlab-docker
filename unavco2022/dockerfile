@@ -120,6 +120,25 @@ RUN mamba env create -f /etc/env/unavco.yml && \
     # chmod -R 777 /opt/conda/envs && \
     chown -R jovyan:users /opt/conda/envs
 
+
+
+# ############# from unvaco2021 #################
+# ENV UNAVCO_FILES /etc/unavco
+
+# RUN mkdir $UNAVCO_FILES && \
+#     mamba install -c conda-forge jupyter_contrib_nbextensions \
+#       jupyter_nbextensions_configurator \
+#       jupyter-resource-usage conda-pack \
+#       kernda \
+#       nb_conda_kernels \
+#       traitlets
+
+# RUN chmod -R 777 /etc/unavco/
+
+# COPY etc/pull.py ${UNAVCO_FILES}/pull.py
+# COPY etc/startup.sh ${UNAVCO_FILES}/startup.sh
+# ###############################################
+
 # works with docker run --user root 
 # RUN mamba env create -f /etc/env/unavco.yml && \
 #     mamba run -n $UNAVCO kernda -o --display-name $UNAVCO /opt/conda/envs/$UNAVCO/share/jupyter/kernels/python3/kernel.json && \
@@ -150,7 +169,7 @@ RUN git clone https://github.com/isce-framework/isce2.git && \
 USER jovyan
 EXPOSE 8888
 
-# ENTRYPOINT bash ${UNAVCO_FILES}/startup.sh; jupyter notebook --no-browser --allow-root
+# ENTRYPOINT bash ${UNAVCO_FILES}/startup.sh; jupyter lab --no-browser --allow-root
 ENTRYPOINT jupyter lab --no-browser --allow-root
 
 ##########################################
