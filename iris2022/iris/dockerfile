@@ -222,19 +222,6 @@ RUN cd /usr/local && \
     cd /usr/local/TauP-2.6.0 && \
     bash gradlew
 
-#ENV JUPYTER "/opt/conda/etc/jupyter"
-#ENV JN_CONFIG "${JUPYTER}/jupyter_notebook_config.json"
-#
-#RUN cd "$JUPYTER" && \
-#    if ! grep -q "\"CondaKernelSpecManager\":" "$JN_CONFIG"; then \
-#        jq '. += {"CondaKernelSpecManager": {"name_format": "{display_name}"}}' "$JN_CONFIG" >> temp; \
-#        mv temp "$JN_CONFIG"; \
-#    fi && \
-#    if ! grep -q "\"shell_command\":" "[\"/bin/tcsh\"]"; then \
-#        jq '.["NotebookApp"] |= {"terminado_settings": {"shell_command": ["/bin/tcsh"]}}' "$JN_CONFIG" >> temp; \
-#        mv temp "$JN_CONFIG"; \
-#        fi
-
 # Install mseed #############################
 ENV PTH "/usr/bin:/usr/local/mseed2sac:/usr/local/TauP-2.6.0:/usr/local/TauP-2.6.0/bin:/usr/local/sac/bin:/opt/conda/envs/iris/bin:${PATH}"
 RUN conda env config vars set -n iris PATH="${PTH}"
