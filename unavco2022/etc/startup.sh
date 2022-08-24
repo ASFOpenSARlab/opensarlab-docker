@@ -2,19 +2,10 @@
 
 set -ex
 
-# python -m pip install --user \
-#     ipywidgets \
-#     mpldatacursor
-
 python -m pip install --user \
     ipywidgets \
     mpldatacursor \
     nbgitpuller
-    # rise \
-    # # hide_code \
-    # jupyter_nbextensions_configurator
-
-# # conda install -c conda-forge jupyter_client=7.1.0 jupyter_server=1.13.1  --force-reinstall
 
 python=$(python --version 2>&1)
 v=$(echo $python | cut -d'.' -f 2)
@@ -25,95 +16,17 @@ export PATH=$HOME/.local/bin:$PATH
 ############# pull.py ##############################
 python -m pip install --user nbgitpuller
 
-# # copy over our version of pull.py
-# # REMINDER: REMOVE IF CHANGES ARE MERGED TO NBGITPULLER
-# cp "${UNAVCO_FILES}"/pull.py /home/jovyan/.local/lib/python3.9/site-packages/nbgitpuller/pull.py
-
 # Disable the extension manager in Jupyterlab since server extensions are uninstallable
 # by users and non-server extension installs do not persist over server restarts
 jupyter labextension disable @jupyterlab/extensionmanager-extension
 
 mkdir -p $HOME/.ipython/profile_default/startup/
-# cp "${UNAVCO_FILES}"/00-df.py $HOME/.ipython/profile_default/startup/00-df.py
 
 gitpuller https://github.com/parosen/Geo-SInC.git main $HOME/Geo-SInC
 gitpuller https://github.com/ASFOpenSARlab/opensarlab-envs.git main $HOME/conda_environments
 
 ####################################################
 
-# # Add Path to local pip execs.
-# export PATH=$HOME/.local/bin:$PATH
-
-# CONDARC=$HOME/.condarc
-# if ! test -f "$CONDARC"; then
-# cat <<EOT >> $CONDARC
-# channels:
-#   - conda-forge
-#   - defaults
-# channel_priority: strict
-# envs_dirs:
-#   - /home/jovyan/.local/envs
-#   - /opt/conda/envs
-# EOT
-# fi
-
-# conda init
-
-# # added unavco
-# echo "create directory"
-# mkdir -p "$HOME"/.local/envs/
-
-# ############### Copy to .local/envs ###############
-# LOCAL="$HOME"/.local
-# ENVS="$LOCAL"/envs
-# NAME=unavco
-# PREFIX="$ENVS"/"$NAME" 
-# SITE_PACKAGES=$PREFIX"/lib/python3."$v"/site-packages"
-# ##############################################################
-
-# echo "$PREFIX"
-# if [ ! -d "$PREFIX" ]; then
-#   echo "mamba create"
-#   mamba env create -f "$ENVS"/"$NAME".yml -q
-
-#   mamba run -n "$NAME" kernda --display-name "$NAME" -o --env-dir "$PREFIX" "$PREFIX"/share/jupyter/kernels/python3/kernel.json
-#   source ${UNAVCO_FILES}/unavco_env.sh
-# else
-#   echo "mamba update"
-#   mamba env update -f "$ENVS"/"$NAME".yml -q
-# fi
-
-# # echo "mamba clean"
-
-# # mamba clean --yes --all
-
-# # check if config file exists
-# JN_CONFIG=$HOME/.jupyter/jupyter_notebook_config.json
-
-# # generate config file if it doesn't exist
-# if [ ! -f "$HOME/.jupyter" ]; then
-#   echo "Creating jupyter_notebook_config.json"
-#   mkdir -p "$HOME/.jupyter"
-#   touch "$JN_CONFIG"
-# fi
-
-# if ! grep -q "\"CondaKernelSpecManager\":" "$JN_CONFIG"; then
-# jq '. += {"CondaKernelSpecManager": {"name_format": "{display_name}", "env_filter": ".*opt/conda.*"}}' "$JN_CONFIG" >> temp;
-# mv temp "$JN_CONFIG";
-# fi
-
-# BASH_RC=/home/jovyan/.bashrc
-# grep -qxF 'conda activate unavco' $BASH_RC || echo 'conda activate unavco' >> $BASH_RC
-
-# # bash profile has dup in unavco.sh
-# BASH_PROFILE=$HOME/.bash_profile
-# if ! test -f "$BASH_PROFILE"; then
-# cat <<EOT > $BASH_PROFILE
-# if [ -s ~/.bashrc ]; then
-#     source ~/.bashrc;
-# fi
-# EOT
-# fi
 
 python -m pip install df-jupyter-magic
 

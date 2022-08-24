@@ -13,8 +13,6 @@ RUN apt-get update && \
     apt-get update && \
     apt-get upgrade -y
 
-# COPY tests/* /tests/
-
 RUN apt-get install -y \
     proj-bin \
     geotiff-bin \
@@ -60,14 +58,10 @@ RUN mamba install -c conda-forge jupyter_contrib_nbextensions \
     jupyter-resource-usage nb_conda_kernels jupyterlab-spellchecker \
     ipympl kernda
 
-# RUN python -m pip install url-widget opensarlab-profile-label opensarlab-doc-link \
-#     opensarlab_controlbtn opensarlab-notifications==0.1.4 opensarlab-theme-light
-
 RUN python -m pip install url-widget opensarlab-doc-link \
     opensarlab_controlbtn opensarlab-notifications==0.1.4 opensarlab-theme-light
 
 # Make sure that any files in the home directory are jovyan permission
-# RUN chown -R jovyan:users /home/jovyan/
 RUN chown -R jovyan:users $HOME/
 
 # Add sudo group user 599 elevation
@@ -107,21 +101,17 @@ WORKDIR /home/jovyan
 RUN conda init
 
 COPY env /etc/env
-# RUN chmod -R 755 /etc/env && \
-RUN chmod -R 777 /etc/env && \
+RUN chmod -R 755 /etc/env && \
     chown -R jovyan:users /etc/env
 
 RUN mkdir /aria
 
-## NEED THIS
 ENV UNAVCO="unavco"
-# okada-wrapper issue: pip==2.1... might be the solution?
 RUN mamba env create -f /etc/env/unavco.yml && \
     mamba run -n $UNAVCO kernda -o --display-name $UNAVCO /opt/conda/envs/$UNAVCO/share/jupyter/kernels/python3/kernel.json && \
     source /etc/env/unavco_env.sh && \
     mamba clean --yes --all && \
     chmod -R 755 /opt/conda/envs && \
-    # chmod -R 777 /opt/conda/envs && \
     chown -R jovyan:users /opt/conda/envs
 
 ############# based on unvaco2021 #################
@@ -137,7 +127,6 @@ RUN mkdir $UNAVCO_FILES && \
 
 RUN chmod -R 777 /etc/unavco/
 
-# COPY etc/pull.py ${UNAVCO_FILES}/pull.py
 COPY etc/startup.sh ${UNAVCO_FILES}/startup.sh
 ###############################################
 
@@ -156,20 +145,7 @@ RUN git clone https://github.com/isce-framework/isce2.git && \
     mv ./isce2/examples/input_files/alos2/alos2burstApp.xml ${OPT_PATH}/examples/input_files/alos2/alos2burstApp.xml && \
     rm -rf isce2
 
-# ################# Git Clone Continue ##################
-# RUN mv -v /Geo-SInC $HOME && \
-#     mv -v /conda_environments $HOME 
-# #######################################################
-
 USER jovyan
 EXPOSE 8888
 
 ENTRYPOINT bash ${UNAVCO_FILES}/startup.sh; jupyter lab --no-browser --allow-root
-# ENTRYPOINT jupyter lab --no-browser --allow-root
-
-##########################################
-
-# FROM release as testing 
-
-# RUN bash /tests/finale.sh
-# RUN bash /tests/unavco.sh
