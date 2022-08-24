@@ -2,10 +2,20 @@
 
 set -ex
 
-# echo /
+if [ ! -d $HOME/Geo-SInC ];
+then
+  mv -v /etc/unavco/Geo-SInC $HOME
+else
+  rm -rf /etc/unavco/Geo-SInC
+fi
 
-mv -v /Geo-SInC $HOME
-mv -v /conda_environments $HOME 
+if [ ! -d $HOME/conda_environments ];
+then
+  mv -v /etc/unavco/conda_environments $HOME
+else
+  rm -rf /etc/unavco/conda_environments
+fi
+# mv -v /etc/unavco/conda_environments $HOME
 
 # python -m pip install --user \
 #     ipywidgets \

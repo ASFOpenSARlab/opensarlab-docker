@@ -121,13 +121,7 @@ RUN mamba env create -f /etc/env/unavco.yml && \
     # chmod -R 777 /opt/conda/envs && \
     chown -R jovyan:users /opt/conda/envs
 
-########################### Manual Git install ########################### 
-RUN git clone https://github.com/parosen/Geo-SInC.git /Geo-SInC && \
-    git clone https://github.com/ASFOpenSARlab/opensarlab-envs.git /conda_environments
-##########################################################################  
-
-
-############# from unvaco2021 #################
+############# based on unvaco2021 #################
 ENV UNAVCO_FILES /etc/unavco
 
 RUN mkdir $UNAVCO_FILES && \
@@ -137,6 +131,11 @@ RUN mkdir $UNAVCO_FILES && \
       kernda \
       nb_conda_kernels \
       traitlets
+
+########################### Manual Git install ########################### 
+RUN git clone https://github.com/parosen/Geo-SInC.git /etc/unavco/Geo-SInC && \
+    git clone https://github.com/ASFOpenSARlab/opensarlab-envs.git /etc/unavco/conda_environments
+##########################################################################  
 
 RUN chmod -R 777 /etc/unavco/
 
