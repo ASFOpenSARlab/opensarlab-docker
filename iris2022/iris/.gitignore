@@ -1,0 +1,15 @@
+*
+local-build.sh 
+!.gitignore
+!build.sh
+!dockerfile
+!download.sh
+!singleuser/
+!singleuser/**
+!envs/
+!envs/**
+!pkgs/
+!pkgs/**
+!tests/
+!cmd.sh
+!entrypoint.sh
