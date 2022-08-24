@@ -60,7 +60,10 @@ RUN mamba install -c conda-forge jupyter_contrib_nbextensions \
     jupyter-resource-usage nb_conda_kernels jupyterlab-spellchecker \
     ipympl kernda
 
-RUN python -m pip install url-widget opensarlab-profile-label opensarlab-doc-link \
+# RUN python -m pip install url-widget opensarlab-profile-label opensarlab-doc-link \
+#     opensarlab_controlbtn opensarlab-notifications==0.1.4 opensarlab-theme-light
+
+RUN python -m pip install url-widget opensarlab-doc-link \
     opensarlab_controlbtn opensarlab-notifications==0.1.4 opensarlab-theme-light
 
 # Make sure that any files in the home directory are jovyan permission
@@ -131,11 +134,6 @@ RUN mkdir $UNAVCO_FILES && \
       kernda \
       nb_conda_kernels \
       traitlets
-
-# ########################### Manual Git install ########################### 
-# RUN git clone https://github.com/parosen/Geo-SInC.git /etc/unavco/Geo-SInC && \
-#     git clone https://github.com/ASFOpenSARlab/opensarlab-envs.git /etc/unavco/conda_environments
-# ##########################################################################  
 
 RUN chmod -R 777 /etc/unavco/
 
