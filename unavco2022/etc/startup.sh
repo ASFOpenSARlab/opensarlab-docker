@@ -2,62 +2,63 @@
 
 set -ex
 
-if [ ! -d $HOME/Geo-SInC ];
-then
-  mv -v /etc/unavco/Geo-SInC $HOME
-else
-  rm -rf /etc/unavco/Geo-SInC
-fi
+########################## work but no sync ##########################
 
-if [ ! -d $HOME/conda_environments ];
-then
-  mv -v /etc/unavco/conda_environments $HOME
-else
-  rm -rf /etc/unavco/conda_environments
-fi
-# mv -v /etc/unavco/conda_environments $HOME
+# if [ ! -d $HOME/Geo-SInC ];
+# then
+#   mv -v /etc/unavco/Geo-SInC $HOME
+# else
+#   rm -rf /etc/unavco/Geo-SInC
+# fi
+
+# if [ ! -d $HOME/conda_environments ];
+# then
+#   mv -v /etc/unavco/conda_environments $HOME
+# else
+#   rm -rf /etc/unavco/conda_environments
+# fi
+
+########################## work but no sync ##########################
+
 
 # python -m pip install --user \
 #     ipywidgets \
 #     mpldatacursor
 
-# python -m pip install --user \
-#     ipywidgets \
-#     mpldatacursor \
-#     nbgitpuller \
-#     rise \
-#     # hide_code \
-#     jupyter_nbextensions_configurator
+python -m pip install --user \
+    ipywidgets \
+    mpldatacursor \
+    nbgitpuller
+    # rise \
+    # # hide_code \
+    # jupyter_nbextensions_configurator
 
 # # conda install -c conda-forge jupyter_client=7.1.0 jupyter_server=1.13.1  --force-reinstall
 
-# python=$(python --version 2>&1)
-# v=$(echo $python | cut -d'.' -f 2)
+python=$(python --version 2>&1)
+v=$(echo $python | cut -d'.' -f 2)
 
-# ############# pull.py ##############################
-# python -m pip install --user nbgitpuller
+# Add Path to local pip execs.
+export PATH=$HOME/.local/bin:$PATH
+
+############# pull.py ##############################
+python -m pip install --user nbgitpuller
 
 # # copy over our version of pull.py
 # # REMINDER: REMOVE IF CHANGES ARE MERGED TO NBGITPULLER
 # cp "${UNAVCO_FILES}"/pull.py /home/jovyan/.local/lib/python3.9/site-packages/nbgitpuller/pull.py
 
-# # Disable the extension manager in Jupyterlab since server extensions are uninstallable
-# # by users and non-server extension installs do not persist over server restarts
-# jupyter labextension disable @jupyterlab/extensionmanager-extension
+# Disable the extension manager in Jupyterlab since server extensions are uninstallable
+# by users and non-server extension installs do not persist over server restarts
+jupyter labextension disable @jupyterlab/extensionmanager-extension
 
-# mkdir -p $HOME/.ipython/profile_default/startup/
-# # cp "${UNAVCO_FILES}"/00-df.py $HOME/.ipython/profile_default/startup/00-df.py
+mkdir -p $HOME/.ipython/profile_default/startup/
+# cp "${UNAVCO_FILES}"/00-df.py $HOME/.ipython/profile_default/startup/00-df.py
 
-# # gitpuller https://github.com/parosen/Geo-SInC.git main $HOME/Geo-SInC
+gitpuller https://github.com/parosen/Geo-SInC.git main $HOME/Geo-SInC
+gitpuller https://github.com/ASFOpenSARlab/opensarlab-envs.git main $HOME/conda_environments
 
-# # gitpuller https://github.com/ASFOpenSARlab/opensarlab-envs.git main $HOME/conda_environments
-
-# gitpuller https://github.com/parosen/Geo-SInC.git
-
-# gitpuller https://github.com/ASFOpenSARlab/opensarlab-envs.git
-
-
-# ####################################################
+####################################################
 
 # # Add Path to local pip execs.
 # export PATH=$HOME/.local/bin:$PATH

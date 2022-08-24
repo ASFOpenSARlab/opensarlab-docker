@@ -132,14 +132,14 @@ RUN mkdir $UNAVCO_FILES && \
       nb_conda_kernels \
       traitlets
 
-########################### Manual Git install ########################### 
-RUN git clone https://github.com/parosen/Geo-SInC.git /etc/unavco/Geo-SInC && \
-    git clone https://github.com/ASFOpenSARlab/opensarlab-envs.git /etc/unavco/conda_environments
-##########################################################################  
+# ########################### Manual Git install ########################### 
+# RUN git clone https://github.com/parosen/Geo-SInC.git /etc/unavco/Geo-SInC && \
+#     git clone https://github.com/ASFOpenSARlab/opensarlab-envs.git /etc/unavco/conda_environments
+# ##########################################################################  
 
 RUN chmod -R 777 /etc/unavco/
 
-COPY etc/pull.py ${UNAVCO_FILES}/pull.py
+# COPY etc/pull.py ${UNAVCO_FILES}/pull.py
 COPY etc/startup.sh ${UNAVCO_FILES}/startup.sh
 ###############################################
 
