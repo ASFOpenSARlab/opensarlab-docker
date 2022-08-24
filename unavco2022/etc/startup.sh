@@ -27,7 +27,6 @@ gitpuller https://github.com/ASFOpenSARlab/opensarlab-envs.git main $HOME/conda_
 
 ####################################################
 
-
 python -m pip install df-jupyter-magic
 
 if [ ! -f "$HOME/.jupyter/jupyter_lab_config.py" ]; then
