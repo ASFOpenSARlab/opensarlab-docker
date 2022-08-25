@@ -11,5 +11,6 @@ local-build.sh
 !pkgs/
 !pkgs/**
 !tests/
+!tests/**
 !cmd.sh
 !entrypoint.sh
