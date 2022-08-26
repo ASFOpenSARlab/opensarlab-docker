@@ -4,22 +4,40 @@ This documentation will provide how to use this repository to use localized vers
 
 
 ### Table of Contents:
-1. [Building the UNAVCO Docker Image](#building-the-unavco-docker-image-and-running-it-in-a-docker-container)
+1. [Initial Setup](#initial-setup)
+    - [Install WSL 2](#install-wsl-2)
+    - [Install Docker](#install-docker)
+    - [Install Git](#install-git)
+    - [Create a Case-Sensitive Disc Image](#create-a-case-sensitive-disc-image)
+    - [Clone the Git Repository to Your Computer](#clone-the-git-repository-to-your-computer)
+1. [Running UNAVCO Deployment](#running-unavco-deployment)
+    - [Change to the Directory Holding `Makefile`](#change-to-the-directory-holding-makefile)
+    - [Run `make` Command](#run-make-command)
+    - [Add Any Additional Files You Wish to Access From Your Container](#add-any-additional-files-you-wish-to-access-from-your-container)
+    - [Open Jupyter Notebooks in Your Browser](#open-jupyter-notebooks-in-your-browser)
+    - [Stop Your Container](#stop-your-container)
+    - [Run the Container Again](#run-make-command)
+1. [Troubleshooting](#troubleshooting)
 
+---
 
+<!-- ## Building the UNAVCO Docker Image and Running it in a Docker Container -->
+## **Initial Setup**
+---
 
-## Building the UNAVCO Docker Image and Running it in a Docker Container
+Before using the deployments, users will need to install essential software to run Docker. 
 
-Note: M1 Macs are not currently supported.
-
-## (If Using Windows) Install WSL 2
+### **Install WSL 2**
+---
+*_Note: This only applies to Windows user_.
 
 WSL 2 is a paired down version of Linux running on Windows 10+.
 
 - [WSL 2 Installation Instructions]( https://docs.microsoft.com/en-us/windows/wsl/install-win10)
     - Install the terminal as described in the final optional step on the page linked above
 
-## Install Docker
+### **Install Docker**
+---
 
 - [Linux instructions](https://docs.docker.com/engine/install/ubuntu/) 
     - Select your linux flavor from the left sidebar menu
@@ -28,7 +46,8 @@ WSL 2 is a paired down version of Linux running on Windows 10+.
 - [Mac Instructions](https://docs.docker.com/desktop/mac/install/)
     - X86 Mac support only
     
-## Install Git
+### **Install Git**
+---
 
 - Install 
     - [Linux and Mac Instructions](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
@@ -42,7 +61,10 @@ WSL 2 is a paired down version of Linux running on Windows 10+.
     - [Instructions](https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account)
   
 
-## (If Using MacOS) Create a Case-Sensitive Disc Image
+### **Create a Case-Sensitive Disc Image**
+---
+*_Note: This only applies to MacOS user. Mac with M1 chips are currently not supported._
+
 - Open `Disc Utility`
 
     ![Disk Utility](img/disc_utility.png)
@@ -79,7 +101,8 @@ WSL 2 is a paired down version of Linux running on Windows 10+.
     ![confirm case sensitivity](img/confirm_case_sensitive.png)
      
 
-## Clone the Git Repository to Your Computer
+### **Clone the Git Repository to Your Computer**
+---
 
 - If you are using Windows:
     - Open WSL2 terminal
@@ -99,19 +122,30 @@ WSL 2 is a paired down version of Linux running on Windows 10+.
 ### **WARNING** - Windows (WSL) and Mac OSX file systems are **case-insensitive** by default, which will cause an issue if the above operating system specific instructions are not followed.
 <br />
 
-## Change to the Directory Holding `Makefile` 
+## **Running UNAVCO Deployment**
 
-- run `cd opensarlab-docker/unavco2022`
+This section will provide useful commands that users can use to start up the UNAVCO deployment in localized environment.
 
-## Add Any Additional Files You Wish to Access From Your Container
+### **Change to the Directory Holding `Makefile`**
+---
 
-- Add any files or directories you would like mounted in your container to `home/`
+- Run `cd opensarlab-docker/unavco2022`
 
-## Run `make` command
+### **Run `make` Command**
+---
 
-- run `make` in the terminal
+- Run `make` in the terminal.
 
-## Open Jupyter Notebooks in Your Browser
+### **Add Any Additional Files You Wish to Access From Your Container**
+---
+This is an optional step.
+
+- Add any files or directories you would like mounted in your container to `virtual_home/`
+
+*_Note: Make sure you have `virtual_home` directory first._
+
+### **Open Jupyter Notebooks in Your Browser**
+---
 
 - After successfully running the container, you will see some URLs in your terminal
 
@@ -119,9 +153,10 @@ WSL 2 is a paired down version of Linux running on Windows 10+.
 
 - Open the bottom URL in your browser
 - Do your work
-- Files you save in your home directory will be saved in your local `home/` directory and will still be accessible after the container is shut down
+- Files you save in your home directory will be saved in your local `virtual_home/` directory and will still be accessible after the container is shut down
 
-## Stop Your Container
+### **Stop Your Container**
+---
 
 - In the terminal running your container and Jupyter Server
     - In Linux and Windows, type `Ctrl + c` twice
@@ -133,7 +168,8 @@ WSL 2 is a paired down version of Linux running on Windows 10+.
     1. Use `docker container stop <CONTAINER ID>` to stop your container. You should see your `CONTAINER ID` prompted when the container stops ![docker_stop](./img/docker_stop.PNG)
 
     
-## Run the Container Again
+### **Run the Container Again**
+---
 
 - run `make` again any time you wish to rerun the container
     - This will check for updates to the unavco conda environment every time you rerun the container
@@ -141,7 +177,8 @@ WSL 2 is a paired down version of Linux running on Windows 10+.
         - If there are many updates, this may take up to 35 minutes 
     - If the docker image is not deleted or modified, a cached version will run
     
-## If You Encounter Issues
+## **Troubleshooting**
+---
 
 - Please reach out for support
 - Support contact: uaf-jupyterhub-asf+unavco@alaska.edu
