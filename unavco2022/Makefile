@@ -13,11 +13,11 @@ build:
 
 run:
 	docker run -it --rm -p 8888:8888 \
-	-v ${PWD}/home:/home/jovyan unavco2022:latest
+	-v ${PWD}/virtual_home:/home/jovyan unavco2022:latest
 
 check:
-	if [ ! -d "home" ]; then \
-        mkdir home; \
+	if [ ! -d "virtual_home" ]; then \
+        mkdir virtual_home; \
     else \
-        ls -l | grep home; \
+        ls -l | grep virtual_home; \
     fi

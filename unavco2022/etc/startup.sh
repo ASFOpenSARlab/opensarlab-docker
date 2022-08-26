@@ -13,9 +13,9 @@ v=$(echo $python | cut -d'.' -f 2)
 # Add Path to local pip execs.
 export PATH=$HOME/.local/bin:$PATH
 
-############# pull.py ##############################
 python -m pip install --user nbgitpuller
 
+####################################################
 # Disable the extension manager in Jupyterlab since server extensions are uninstallable
 # by users and non-server extension installs do not persist over server restarts
 jupyter labextension disable @jupyterlab/extensionmanager-extension
