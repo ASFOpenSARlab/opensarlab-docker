@@ -1,0 +1,63 @@
+diff --git a/jupyter_desktop/__init__.py b/jupyter_desktop/__init__.py
+index 856ff15..58fcbba 100644
+--- a/jupyter_desktop/__init__.py
++++ b/jupyter_desktop/__init__.py
+@@ -31,7 +31,7 @@ def setup_desktop():
+     vnc_command = ' '.join(shlex.quote(p) for p in (vnc_args + [
+         '-verbose',
+         '-xstartup', os.path.join(HERE, 'share/xstartup'),
+-        '-geometry', '1680x1050',
++        '-geometry', '2000x1200',
+         '-SecurityTypes', 'None',
+         '-fg',
+         ':1',
+diff --git a/jupyter_desktop/share/web/noVNC-1.2.0/vnc_lite.html b/jupyter_desktop/share/web/noVNC-1.2.0/vnc_lite.html
+index a9e3e9b..acd593c 100644
+--- a/jupyter_desktop/share/web/noVNC-1.2.0/vnc_lite.html
++++ b/jupyter_desktop/share/web/noVNC-1.2.0/vnc_lite.html
+@@ -47,7 +47,7 @@
+         #status {
+             text-align: center;
+         }
+-        #sendCtrlAltDelButton {
++        #jupyterLabPageButton {
+             position: fixed;
+             top: 0px;
+             right: 0px;
+@@ -105,11 +105,11 @@
+             desktopName = e.detail.name;
+         }
+ 
+-        // Since most operating systems will catch Ctrl+Alt+Del
+-        // before they get a chance to be intercepted by the browser,
+-        // we provide a way to emulate this key sequence.
+-        function sendCtrlAltDel() {
+-            rfb.sendCtrlAltDel();
++        // Go to JupyterHub's home page
++        // If this does nto exist, it will give a 404
++        function jupyterLabPage() {
++            const lab_path = window.location.href.replace('desktop', 'lab')
++            window.location.replace(lab_path);
+             return false;
+         }
+ 
+@@ -138,8 +138,8 @@
+             return defaultValue;
+         }
+ 
+-        document.getElementById('sendCtrlAltDelButton')
+-            .onclick = sendCtrlAltDel;
++        document.getElementById('jupyterLabPageButton')
++            .onclick = jupyterLabPage;
+ 
+         // Read parameters specified in the URL query string
+         // By default, use the host and port of server that served this file
+@@ -188,7 +188,7 @@
+ <body>
+     <div id="top_bar">
+         <div id="status">Loading</div>
+-        <div id="sendCtrlAltDelButton">Send CtrlAltDel</div>
++        <div id="jupyterLabPageButton">Go to JupyterLab</div>
+     </div>
+     <div id="screen">
+         <!-- This is where the remote screen will appear -->
