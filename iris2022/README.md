@@ -1,38 +1,123 @@
-# Building the IRIS Docker Image and Running it in a Docker Container
+# **Building the IRIS Docker Image and Running it in a Docker Container**
 
-Note: M1 Macs are not currently supported.
+## *Table of Contents*
+- [**Installation**](#installation)
+    - [Install WSL2 (Windows)](#install-wsl2)
+    - [Install Docker](#install-docker)
+    - [Install Git](#install-git)
+- [**Environment Set Up**](#environment-set-up)
+    - [Create a Case-Sensitive Disc Image (MacOS)](#create-a-case-sensitive-disc-image)
+    - [Before Cloning the Git Repository](#before-cloning-the-git-repository)
+        - [Windows](#windows)
+        - [MacOS](#macos)
+        - [Ubuntu](#ubuntu)
+    - [Cloning Repository](#cloning-repository)
+        - [ssh](#ssh)
+        - [https](#https)
+    - [Move to the IRIS Directory](#move-to-the-iris-directory)
+- [**Running IRIS**](#running-iris)
+    - [Image Build and Run](#image-build-and-run)
+        - [(Optional) Build the Image Without Running](#optional-build-the-image-without-running)
+        - [(Optional) Run Container Without Rebuilding](#optional-run-container-without-rebuilding)
+    - [IRIS Container](#iris-container)
+        - [Open Jupyter in Your Browser](#open-jupyter-in-your-browser)
+        - [Stop Your Container](#stop-your-container)
+        - [Run the Container Again](#run-the-container-again)
+- [**Troubleshooting**](#troubleshooting)
+    - [Common Issues](#common-issues)
+    - [If You Encounter Issues](#if-you-encounter-issues)
+---
 
-# (If Using Windows) Install WSL 2
 
-WSL 2 is a paired down version of Linux running on Windows 10+.
+
+# **Installation**
+
+In this section, we will provide brief guides on how to set up an environment to run the IRIS Dockerfile.
+
+
+In short, here are the list of things you will need to set up:
+- WSL2 (For Windows users only)
+- Docker
+- Git
+
+
+---
+## **Install WSL2**
+---
+
+_**Note: This only applies to Windows OS.**_
+
+WSL2 is a paired-down version of Linux running on Windows 10+.
 
 - [WSL 2 Installation Instructions]( https://docs.microsoft.com/en-us/windows/wsl/install-win10)
     - Install the terminal as described in the final optional step on the page linked above
+    - Make sure to choose Ubuntu for the Linux kernel. While other Linux kernels may work, we have not tested and thus there is no guarantee that they will work.
 
-# Install Docker
+---
+
+## **Install Docker**
 
 - [Linux instructions](https://docs.docker.com/engine/install/ubuntu/) 
-    - Select your linux flavor from the left sidebar menu
+    - Select your Linux flavor from the left sidebar menu.
 - [Windows Instructions using WSL 2](https://docs.docker.com/desktop/windows/install/)
-    - Be sure to follow the WSL 2 backend specific instructions
+    - Be sure to follow the WSL2 backend-specific instructions.
 - [Mac Instructions](https://docs.docker.com/desktop/mac/install/)
-    - X86 Mac support only
-    
-# Install Git
+    - *Only tested on x86 Mac support.
 
-- Install 
+_***Note: M1 Macs were not supported until recently, hence we cannot guarantee that it will work.**_
+
+To make sure that Docker is properly installed, run the basic Docker command to test its validity. 
+
+_Example:_ If you open and run `docker ps`, you should see something like this:
+![`docker ps` sample](img/docker_ps_sample.PNG)
+
+If you get an error on basic commands, such as `docker ps`, you may need to troubleshoot.
+
+---
+    
+## **Install Git**
+
+- Install Git
     - [Linux and Mac Instructions](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
     - Windows
-        - Follow the Linux instructions, running them in a WSL 2 terminal
-- Create an SSH key
-    - If you previously installed git outside of WSL 2, you may need to generate a new ssh key
+        - Follow the Linux instructions, running them in a WSL2 terminal
+- (_Optional_) Create an SSH key
+    - If you previously installed git outside of WSL2, you may need to generate a new ssh key.
     - [Instructions](https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent)
-- Register your SSH key with GitHub
-    - If using WSL 2 on Windows, note that your SSH keys will be stored in /home/<user>/.ssh/
-    - [Instructions](https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account)
+- (_Optional_) Register your SSH key with GitHub
+    - If using WSL2 on Windows, note that your SSH keys will be stored in `/home/<username>/.ssh/`
+    - You can get `<username>` by using `whoami` command.
+    - [Instructions on how to set your ssh key to GitHub](https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account).
   
 
-# (If Using MacOS) Create a Case-Sensitive Disc Image
+_**Note: Setting `ssh` keys is optional since you can still run the IRIS Docker image by cloning with `https`. However, generating and adding an `ssh` key is more convenient in a long run.**_
+
+---
+
+# **Environment Set Up** 
+
+Assuming you have completed the installation, this section will provide a general guideline on how to set the environment up. 
+
+In this section, you will:
+- Create a Case-Sensitive Disc Image (MacOS only)
+- Clone Git repository for IRIS
+
+---
+
+
+## Create a Case-Sensitive Disc Image
+
+_**Note: This only applies to MacOS.**_
+
+ **Size Requirements**:
+
+    - Minimum 15 GB:
+        - 12 GB for Docker image 
+        - Enough volume space for you to save progress.
+
+**Instruction**:
+
+
 - Open `Disc Utility`
 
     ![Disk Utility](img/disc_utility.png)
@@ -69,49 +154,183 @@ WSL 2 is a paired down version of Linux running on Windows 10+.
     ![confirm case sensitivity](img/confirm_case_sensitive.png)
      
 
-# Clone the Git Repository to Your Computer
+---
+## **Before Cloning the Git Repository**
+---
 
-- If you are using Windows:
-    - Open WSL2 terminal
-    - Move to your Linux home directory using `cd ~/`
-        - Run `pwd` to check that you are in `/home/<username>/`. At a minimum, make sure you don't have `/mnt/c/` when you use `pwd`.
-    - Once you are in Linux side of WSL, run `git clone git@github.com:ASFOpenSARlab/opensarlab-docker.git` to clone the repo using ssh or `git clone https://github.com/ASFOpenSARlab/opensarlab-docker.git` to clone it using https.
+The process of cloning the repository differs based on the Operating System you are using.
 
-- If you are using Mac OSX:
-    - In a terminal, move to the case-sensitive volume you created using the instructions above
-        - `cd /Volumes/IRIS`
-    - run `git clone git@github.com:ASFOpenSARlab/opensarlab-docker.git` to clone the repo using shh or `https://github.com/ASFOpenSARlab/opensarlab-docker.git` to clone it using https.
+### **Windows**:
+---
+- Open WSL2 terminal
+- Move to your Linux home directory using `cd ~/`
+    - Run `pwd` to check that you are in `/home/<username>/`. At a minimum, make sure you don't have `/mnt/c/` when you use `pwd`.
+- Once you are on the Linux side of WSL, run the git clone command. Refer to the _cloning repository_ section for more detail.
 
-- If you are using Ubuntu:
-    - Open your terminal
-    - run `git clone git@github.com:ASFOpenSARlab/opensarlab-docker.git` to clone the repo using ssh or `https://github.com/ASFOpenSARlab/opensarlab-docker.git` to clone it using https.
+### **MacOS**
+---
+- In a terminal, move to the case-sensitive volume you created using the instructions above
+    - `cd /Volumes/IRIS`
+- Run the git clone command. Refer to the _cloning repository_ section for more detail.
 
-### **WARNING** - Windows (WSL) and Mac OSX file systems are **case-insensitive** by default, which will cause an issue if the above operating system specific instructions are not followed.
+---
+**WARNING** - Windows (WSL2) and Mac OSX file systems are **case-insensitive** by default, which will cause an issue if the operating system-specific instructions are not followed.
 <br />
 
-# Change to the Directory Holding the Makefile
+---
 
-- run `cd opensarlab-docker/iris2022`
+### **Ubuntu**
+---
+- Open your terminal
+- Run the git clone command. Refer to the _cloning repository_ section for more detail.
 
-# Build the Image and then Run
+---
 
-- run `make` in the terminal
-- Note that we direct output to a log file
-    - If your image build or container run fails, please send this log file when you reach out for support
+## **Cloning Repository**
 
-## (Optional) Build the Image Without Running
+---
 
-- run `make build` in the terminal
-- Note that we direct output to a log file
-    - If your image build or container run fails, please send this log file when you reach out for support
+You will be cloning from ASF's [opensarlab-docker](https://github.com/ASFOpenSARlab/opensarlab-docker) repository. Make sure that you are in `main` branch. 
 
-## (Optional) Run Container Without Rebuilding
+_**Note: When you clone this repository, you will only be using the `iris2022` directory. Ignore the `unavco2021/2022` directory.**_
 
-- run `make run` in the terminal
-- Note that we direct output to a log file
-    - If your image build or container run fails, please send this log file when you reach out for support
+There are two different ways of cloning a repository: You can clone by using `ssh` or using `https`.
 
-# Open Jupyter in Your Browser
+### **ssh**
+---
+
+Before you begin, make sure that your `ssh` key is generated and attached to your GitHub account. To do this, refer to the _Install Git_ section.
+
+
+Assuming you have your `ssh` key setup, run the following command:
+
+```bash
+git clone git@github.com:ASFOpenSARlab/opensarlab-docker.git
+```
+
+This will clone the `opensarlab-docker` repository to where you are currently at.
+
+### **https**
+---
+
+If you have not set your `ssh` key, you can clone your repository using `https`. 
+
+Simply use the following command:
+
+```bash
+git clone https://github.com/ASFOpenSARlab/opensarlab-docker.git
+```
+
+This will also clone the `opensarlab-docker` repository to where you are currently without having to configure your `ssh` key.
+
+
+---
+
+## **Move to the IRIS Directory**
+---
+
+Once you cloned your repository, run the following command to change into proper location:
+
+```bash
+cd opensarlab-docker/iris2022
+```
+
+If you are in the right location, you should see a `Makefile`. You can verify this with the following command:
+
+```bash
+ls
+```
+---
+
+# **Running IRIS**
+---
+
+This seciton will introduce users on how to use the `Docker` to properly run the IRIS deployment on their local computer.
+
+---
+
+## **Image Build and Run**
+---
+
+Before you begin, make sure that your Docker is running properly. 
+
+
+Once you installed Docker in your system, test that Docker works with few simple commands.
+
+_Example:_
+
+```docker
+docker ps
+```
+Should display all containers that are currently running.
+
+
+```docker
+docker images
+```
+
+Should display all images, including hidden ones, on to your terminal.
+
+If you never ran a Docker before, it should not display any images or containers. However, you should not see any error as this indicates that there was something wrong with initial installation process.
+
+
+We would also like to mention that when you are building a Docker image for the first time, it will take a long time, especially for big images like IRIS (30+ minutes).
+
+Running the image for a second time should be instant as long as you don't make any changes to the `iris/dockerfile`.
+
+---
+
+
+### **Starting IRIS Deployment**
+---
+
+In your terminal, run the following command:
+```bash
+make
+```
+
+This command will automatically `build` your Docker image and then `run` the image you just built. 
+
+Note that we direct output to a log file
+- If your image build or container run fails, please send this log file when you reach out for support
+
+---
+### **(Optional) Build the Image Without Running**
+---
+
+If you just want to build the image and not run it, use the following command:
+
+```bash
+make build
+```
+
+Note that we direct output to a log file
+- If your image build or container run fails, please send this log file when you reach out for support
+
+---
+
+### **(Optional) Run Container Without Rebuilding**
+---
+
+Alternatively, if you already have a built image and just want to run the image without rebuilding, use the following command:
+
+```bash
+make run
+```
+
+Note that we direct output to a log file
+- If your image build or container run fails, please send this log file when you reach out for support
+
+
+---
+## **IRIS Container**
+---
+
+Now that you have your Docker container running, you can follow these steps to navigate through your IRIS deployment.
+
+---
+
+### **Open Jupyter in Your Browser**
 
 - After successfully running the container, you will see some URLs in your terminal
 
@@ -119,26 +338,112 @@ WSL 2 is a paired down version of Linux running on Windows 10+.
 
 - Open the bottom URL in your browser
 - Do your work
-- Files you save in your home directory will be saved in your local `home/` directory and will still be accessible after the container is shut down
+- Files you save in your home directory will be saved in your local `virtual_home/` directory and will still be accessible after the container is shut down
 
-# Stop Your Container
+---
+### **Stopping Your Container**
+---
 
 - In the terminal running your container and Jupyter Server
     - In Linux and Windows, type `Ctrl + c` twice
     - In Mac OS, type `control + c` twice 
 
-- **NOTE:** If you are using WSL 2 (i.e. Windows), you can close a terminal window without stopping any of its running processes. If you close the window where your container is running, it will stay alive and prevent you from running `make run` again until the container has been stopped. If this happens, complete the following steps to stop the container
+- **NOTE:** If you are using WSL2 (i.e. Windows), you can close a terminal window without stopping any of its running processes. If you close the window where your container is running, it will stay alive and prevent you from running `make run` again until the container has been stopped. If this happens, complete the following steps to stop the container
 
     1. Use `docker ps` to check if container the is running. If it is, copy the `CONTAINER ID`. ![docker_ps](./img/docker_ps.PNG)
     1. Use `docker container stop <CONTAINER ID>` to stop your container. You should see your `CONTAINER ID` prompted when the container stops ![docker_stop](./img/docker_stop.PNG)
 
     
-# Run the Container Again
+---
+### **Run the Container Again**
+---
 
 - run `make` again any time you wish to rerun the container
     - If the docker image is not deleted or modified, a cached version will run
     
-# If You Encounter Issues
+---
 
+# **Troubleshooting**
+
+## **Common Issues**
+---
+
+### __Permission Denied with `ssh`__
+---
+
+When you are trying to clone Git repository via `ssh`, you may come across erros that looks something like this:
+
+```bash
+git@github.com:ASFOpenSARlab/opensarlab-docker.git
+Cloning into 'opensarlab-docker'...
+The authenticity of host 'github.com (xxx.xx.xxx.x)' cannot be established.
+ECDSA key fingerprint is SHA256:xxxxxxxxxxxxxxxxxxxxxxxx/xxxxxxxx/xxxxxxxxx.
+Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+Warning: Permanently added 'github.com,xxx.xx.xxx.x' (ECDSA) to the list of known hosts.
+git@github.com: Permission denied (publickey).
+fatal: Could not read from remote repository.
+
+Please make sure you have the correct access rights
+and the repository exists.
+```
+
+This indicates that you may be having an issue with `ssh` key.
+
+_Solution:_
+
+There are a few ways to get around this:
+1. Clone using HTTPS
+1. Set the ssh key
+
+The HTTPS method may be an easier workaround assuming you're not going to push anything to the Git repository. 
+
+Alternatively, if you would like to clone using the ssh method, which is the recommended way for _developers_, then refer to the _Installing Git_ section of this README.
+
+### __run `make` in the terminal → Cannot connect to the Docker daemon__
+---
+
+When you try to run `make` command, you may see errors like this:
+
+```bash
+cd iris && bash build.sh 2>&1 | tee log
++ IMAGE_NAME=iris2022
++ '[' -e download.sh ']'
++ bash download.sh
+Cloning into 'TRAIN'...
+warning: unable to access '/Users/<username>/.config/git/attributes': Permission denied
++ cp dockerfile dockerfile.build
+++ date +%F-%H-%M-%S
++ BUILD_TAG=2022-08-29-12-41-22
+++ git rev-parse --short HEAD
++ COMMIT_HEAD=5437e1d
++ docker build -f dockerfile.build --target testing .
+Cannot connect to the Docker daemon at unix:///var/run/docker.sock. Is the docker daemon running?
+bash start_container.sh 2>&1 | tee log
+++ pwd
++ docker run -it --init --rm -p 8888:8888 -v /Volumes/IRIS/opensarlab-docker/iris2022/virtual_home:/home/jovyan iris2022:latest
+docker: Cannot connect to the Docker daemon at unix:///var/run/docker.sock. Is the docker daemon running?.
+See 'docker run --help'.
+```
+
+_Solution:_
+
+You can do something like this to make sure that it works:
+
+- Docker app on your computer
+- Run make in the terminal again.
+
+
+---
+
+### __run `make` in the terminal → An error occurs at an intermediate step__
+
+_Solution:_
+
+- Close the Docker app and the terminal
+- Re-open both, and then run make in the terminal again (sometimes, closing and then re-opening things just works!) 
+
+---
+## **If You Encounter Issues**
+---
 - Please reach out for support
 - Support contact: uaf-jupyterhub-asf+IRIS2022@alaska.edu
