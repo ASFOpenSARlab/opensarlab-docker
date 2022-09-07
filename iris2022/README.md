@@ -146,7 +146,6 @@ _**Note: This only applies to MacOS.**_
         - Leave remaining fields set to their default values
     - Click the `Save` button
     
-    <!-- ![create image](img/create_image.png) -->
     ![iris create image](img/iris_create_image.png)
  
 - Open a terminal
@@ -157,7 +156,7 @@ _**Note: This only applies to MacOS.**_
     - `mkdir A`
     - if you are able to create both files or directories, the file system is case-sensitive
     
-    ![confirm case sensitivity](img/confirm_case_sensitive.png)
+    ![iris confirm case sensitivity](img/iris_confirm_case_sensitive.png)
      
 
 ---
@@ -449,7 +448,7 @@ Now that you have downloaded a copy of the `OSLdata.zip` file, you should move t
 This directory is connected to the Docker container, so any files you save there will also appear within your Docker. Likewise, any files you create within the Docker will appear in that directory.
 
 See below image for more detail:
-<!-- ![save_to_virtual_home]() -->
+![save_to_virtual_home](img/save_to_virtual_home.png)
 
 ---
 
