@@ -158,7 +158,6 @@ _**Note: This only applies to MacOS.**_
     
     ![iris confirm case sensitivity](img/iris_confirm_case_sensitive.png)
      
-
 ---
 ## **Before Cloning the Git Repository**
 ---
