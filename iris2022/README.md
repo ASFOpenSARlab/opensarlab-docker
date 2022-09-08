@@ -475,6 +475,63 @@ Lastly, you will need to unzip the `OSLdata.zip` file that is located in your Do
 ## **Common Issues**
 ---
 
+### __Issue on Installing/Running Docker__
+---
+Docker is one of the common tools that users may encounter issues with. While we cannot troubleshoot every single problem, here are the common issues and some ways to solve them:
+
+- **Cannot run basic commands (e.g. `docker ps`)**
+
+    You may need to activate the Docker application on your computer. One possible way to solve this is by locating where the Docker application is and executing them. This process differs depending on your operating systems 
+    
+    For instance, you may need to click the Docker app in the `applications` folder to execute. 
+
+    Another possibility is that the Docker application does not have a proper permission setting (i.e. you will need to use `sudo` to run the `docker` command). To not use `sudo`, you will need to add yourself to the usergroup. Refer to the [official documentation](https://docs.docker.com/engine/install/linux-postinstall/) for more detail.
+
+- **Can run Docker, but build fails**
+
+    You may possibly run into following errors:
+    ``` bash
+    'docker build' error: "failed to solve with frontend dockerfile.v0
+    ```
+
+    This is a common error, especially among those who are using WSL2. This happens due to the improper settings on `config.json`. 
+    
+    One possible solution is to edit the `config.json` *located in `~/.docker/config.json`. Use any text editor, such as vim, and open the `config.json`. 
+
+    **Note: This is the default location. If you moved it elsewhere or deleted the file, it may not be in this directory.*
+
+    If `config.json` has something like following:
+    ```bash
+    {
+        "credsStore": "desktop.exe"
+    }
+    ```
+    Then the automatically generated values are causing the issue. Try making `credsStore` to `credStore` (remove `s`) or remove the entire middle line (while keeping curly brackets). 
+
+    Do note that this is one of the possible solutions.
+
+
+- **Docker slows down my computer**
+
+    This is a common issue for those that are using Windows/WSL2. Since WSL2 does not have any limit set on Docker, it may end up hogging up possible resources that your computer has. 
+
+    One way to prevent Docker from hogging up your computer resources is to put a limit using `.wslconfig`. 
+
+    If you are using Windows computer, here are the steps you'll need to take:
+
+    1. Use `WinKey + r` to open `run` window.
+    2. Type in `%UserProfile%` and hit enter.
+    3. If you do not see `.wslconfig`, then create one.
+    4. Edit your `.wslconfig` to set a resource limit.
+
+    For reference, our `.wslconfig` looks something like this:
+
+    ```
+    [wsl2]
+    memory=4GB
+    guiApplications=false
+    ```
+
 ### __Permission Denied with `ssh`__
 ---
 
