@@ -23,6 +23,11 @@
         - [Open Jupyter in Your Browser](#open-jupyter-in-your-browser)
         - [Stop Your Container](#stop-your-container)
         - [Run the Container Again](#run-the-container-again)
+- [**Migrating from OSL to Docker**](#migrating-from-osl-to-docker)
+    - [Compress Directories to a Zip File](#compress-directories-to-a-zip-file)
+    - [Download Zip File to Your Computer](#download-zip-file-to-your-computer)
+    - [Copy Zipped File to Docker](#copy-zipped-file-to-docker)
+    - [Unzip the Zipped File](#unzip-the-zipped-file)
 - [**Troubleshooting**](#troubleshooting)
     - [Common Issues](#common-issues)
     - [If You Encounter Issues](#if-you-encounter-issues)
@@ -141,7 +146,7 @@ _**Note: This only applies to MacOS.**_
         - Leave remaining fields set to their default values
     - Click the `Save` button
     
-    ![create image](img/create_image.png)
+    ![iris create image](img/iris_create_image.png)
  
 - Open a terminal
   - change directories into your mounted volume (created from your new disc image)
@@ -151,9 +156,8 @@ _**Note: This only applies to MacOS.**_
     - `mkdir A`
     - if you are able to create both files or directories, the file system is case-sensitive
     
-    ![confirm case sensitivity](img/confirm_case_sensitive.png)
+    ![iris confirm case sensitivity](img/iris_confirm_case_sensitive.png)
      
-
 ---
 ## **Before Cloning the Git Repository**
 ---
@@ -363,10 +367,169 @@ Now that you have your Docker container running, you can follow these steps to n
     
 ---
 
+# **Migrating from OSL to Docker**
+
+_**Note: This only applies to those who used the OSL version of IRIS deployment in the past.**_
+
+Since the IRIS deployment on OpenSARLab will no longer be available, you can follow these steps to migrate the files you wish to save on to your computer. 
+
+
+---
+
+## **Compress Directories to a Zip File**
+
+First, you will need to compress the directories you want to be copied over to a zip file in OpenSARLab. You can do so with the following steps:
+
+1. Open up a terminal in the OSL, and make sure you are in the home directory. If you’re not sure, enter this command:
+
+``` bash
+(iris) jupyter-username: ~> cd ~
+```
+
+2. Now that you’re in your home directory, let’s take all the directories you made throughout the SSBW and compress them into one, downloadable zip file. The command you need will look similar to the following:
+
+``` bash
+(iris) jupyter-username: ~> zip -r OSLdata.zip directory1 directory2 directory3
+```
+
+Where:
+
+- **OSLdata.zip**: Name of the zipped (compressed) file containing your directories.
+- **directory1...directoryN**: Names of the directories you made throughout the SSBW.
+- **-r**: Recursive flag; allows you to copy all of the contents within a directory.
+
+_**Note: The name of the zip file doesn't necessarily have to be `OSLdata.zip`, but we will use `OSLdata.zip` in this documentation.**_
+
+_**Example:**_
+At this point, you should have the following directories in your OSL:
+
+- `focmec`
+- `geodesy`
+- `groupwork`
+- `ieb` 
+- `irisdmc` 
+- `jupyter` 
+- `network`
+- `python`
+- `sac` 
+
+So the command to zip those directories should look like this:
+
+```bash
+(iris) jupyter-username: ~> zip -r OSLdata.zip focmec geodesy groupwork ieb irisdmc jupyter network python sac
+```
+
+Feel free to add other directories that you’d like to save or only copy over some of the directories! Also, don’t worry about the `iris_data` directory, as that will be part of the container you downloaded. If you look in the home folder you should now see a file called `OSLdata.zip`.
+
+---
+
+## **Download Zip File to Your Computer**
+
+Now that you have a zipped file, you should be able to download them from OSL to your home computer.
+
+1. On your OSL desktop, click on *Go to JupyterLab* in the top right corner next to the **shutdown** button.
+2. From the JupyterLab screen, find **OSLdata.zip** listed on the left panel. You should already be in the home directory but you may have to navigate around for the file. 
+3. Once you find the **OSLdata.zip** file, right-click on **OSLdata.zip** (for a Mac: click with two fingers if you do not have a right-click)
+4. From there a drop-down menu will open up and you can click download. Refer to the image below:
+
+![osl_download_zip](img/osl_download_zip.png)
+
+5. The **OSLdata.zip** file will now be available on your computer in your Downloads folder. 
+
+---
+
+## **Copy Zipped File to Docker**
+
+Now that you have downloaded a copy of the `OSLdata.zip` file, you should move them to your Docker container.
+
+1. Move the `OSLdata.zip` file to the `/Volumes/IRIS/opensarlab-docker/iris2022/virtual_home` directory.
+
+This directory is connected to the Docker container, so any files you save there will also appear within your Docker. Likewise, any files you create within the Docker will appear in that directory.
+
+See below image for more detail:
+![save_to_virtual_home](img/save_to_virtual_home.png)
+
+---
+
+## **Unzip the Zipped File**
+
+Lastly, you will need to unzip the `OSLdata.zip` file that is located in your Docker container.
+
+1. Once the `OSLdata.zip` file is in the `virtual_home` directory, open the terminal on the Docker container.
+2. If the IRIS Dockerfile is not running already, follow the directions above to run the Docker. 
+3. Open a terminal in the Docker as you have done with the OSL in the past.
+4. You should be in your home directory and if you type `ls` you should see the `OSLdata.zip` file. 
+5. Run following command to unzip your file:
+``` bash
+(iris) jovyan@username:~$ unzip OSLdata.zip
+```
+
+
+
+
+---
+
 # **Troubleshooting**
 
 ## **Common Issues**
 ---
+
+### __Issue on Installing/Running Docker__
+---
+Docker is one of the common tools that users may encounter issues with. While we cannot troubleshoot every single problem, here are the common issues and some ways to solve them:
+
+- **Cannot run basic commands (e.g. `docker ps`)**
+
+    You may need to activate the Docker application on your computer. One possible way to solve this is by locating where the Docker application is and executing them. This process differs depending on your operating systems 
+    
+    For instance, you may need to click the Docker app in the `applications` folder to execute. 
+
+    Another possibility is that the Docker application does not have a proper permission setting (i.e. you will need to use `sudo` to run the `docker` command). To not use `sudo`, you will need to add yourself to the usergroup. Refer to the [official documentation](https://docs.docker.com/engine/install/linux-postinstall/) for more detail.
+
+- **Can run Docker, but build fails**
+
+    You may possibly run into following errors:
+    ``` bash
+    'docker build' error: "failed to solve with frontend dockerfile.v0
+    ```
+
+    This is a common error, especially among those who are using WSL2. This happens due to the improper settings on `config.json`. 
+    
+    One possible solution is to edit the `config.json` *located in `~/.docker/config.json`. Use any text editor, such as vim, and open the `config.json`. 
+
+    **Note: This is the default location. If you moved it elsewhere or deleted the file, it may not be in this directory.*
+
+    If `config.json` has something like following:
+    ```bash
+    {
+        "credsStore": "desktop.exe"
+    }
+    ```
+    Then the automatically generated values are causing the issue. Try making `credsStore` to `credStore` (remove `s`) or remove the entire middle line (while keeping curly brackets). 
+
+    Do note that this is one of the possible solutions.
+
+
+- **Docker slows down my computer**
+
+    This is a common issue for those that are using Windows/WSL2. Since WSL2 does not have any limit set on Docker, it may end up hogging up possible resources that your computer has. 
+
+    One way to prevent Docker from hogging up your computer resources is to put a limit using `.wslconfig`. 
+
+    If you are using Windows computer, here are the steps you'll need to take:
+
+    1. Use `WinKey + r` to open `run` window.
+    2. Type in `%UserProfile%` and hit enter.
+    3. If you do not see `.wslconfig`, then create one.
+    4. Edit your `.wslconfig` to set a resource limit.
+
+    For reference, our `.wslconfig` looks something like this:
+
+    ```
+    [wsl2]
+    memory=4GB
+    guiApplications=false
+    ```
 
 ### __Permission Denied with `ssh`__
 ---
@@ -429,7 +592,7 @@ _Solution:_
 
 You can do something like this to make sure that it works:
 
-- Docker app on your computer
+- Open Docker app on your computer
 - Run make in the terminal again.
 
 
