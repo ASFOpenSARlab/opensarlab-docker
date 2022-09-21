@@ -1,7 +1,7 @@
 # **Building the IRIS Docker Image and Running it in a Docker Container**
 
 ## *Table of Contents*
-- [**Introduction**]()
+- [**Introduction**](#introduction)
 - [**Installation**](#installation)
     - [Install WSL2 (Windows)](#install-wsl2)
     - [Install Docker](#install-docker)
@@ -29,6 +29,10 @@
     - [Download Zip File to Your Computer](#download-zip-file-to-your-computer)
     - [Copy Zipped File to Docker](#copy-zipped-file-to-docker)
     - [Unzip the Zipped File](#unzip-the-zipped-file)
+- [**Uninstallation Guide**](#uninstallation-guide)
+    - [Backing Up Progress](#backing-up-progress)
+    - [Remove this Repo](#remove-this-repo)
+    - [Purge Docker](#purge-docker)
 - [**Troubleshooting**](#troubleshooting)
     - [Common Issues](#common-issues)
     - [If You Encounter Issues](#if-you-encounter-issues)
@@ -36,8 +40,26 @@
 
 # **Introduction**
 
-lorem ipsom
+As the SSBW winds down, access to the Moodle server containing the 
+workshop tutorials will continue to be available to participants for the 
+foreseeable future.  However, access to the OSL computing environment will 
+come to an end. This means that you will lose the ability to continue to work 
+on tutorials and access the work you have already completed.
 
+The following instructions describe a way for you to continue to have access 
+to the OSL locally on your machine. The instructions take you through 
+the steps necessary to install and run a [Docker Container](https://www.youtube.com/watch?app=desktop&v=31ieHmcTUOk) of the 
+OSL on your local machine, compress and download your work from the OSL 
+in the cloud and import that locally, and finally, uninstall the OSL Docker 
+Container if you wish.  
+
+While we have tested these instructions and found that they work successfully.
+However, should you choose to follow them, you should be aware that they 
+are being offered without support (e.g. buyer beware). That means that 
+neither the OSL team nor the SSBW will be available to assist you should 
+you encounter difficulties due to your local environment.  However, do note 
+that a Slack channel in the SSBW workspace, `#osl_docker`, has been created 
+to facilitate peer-to-peer communication and support
 
 ---
 
@@ -471,7 +493,95 @@ Lastly, you will need to unzip the `OSLdata.zip` file that is located in your Do
 ```
 
 
+---
 
+# **Uninstallation Guide**
+
+In this section, we will guide you to uninstall software that you may no longer need.
+
+_Note: This is an optional step. You may ignore this section if you wish to keep everything you installed._
+
+---
+
+
+## **Backing Up Progress**
+
+---
+
+_Note: If you don't mind removing your coursework, you can ignore this section._
+
+If you wish to keep everything you've done so far, you should move your volume somewhere else. 
+
+Your progress is stored in the `virtual_home` directory. It is recommended to compress the `virtual_home` directory and move them elsewhere.
+
+
+You can do so with these commands:
+
+``` bash
+# Note 1: This assumes that you are in this directory
+
+# command 1: Comporess virtual_home
+# Note 2: If you don't have 'zip' installed, your terminal will guide you.
+zip -r virtual_home.zip virtual_home
+
+# command 2: Move compressed directory
+# Note 3: replace <destination> with whichever path you wish to store in.
+mv virtual_home.zip <destination>
+```
+
+---
+
+## **Remove this Repo**
+
+---
+
+You can remove this repo from your computer with the following commands:
+
+``` bash
+# Note 1: This assumes that you are in 'opensarlab-docker/iris2022'
+
+# command 1: Move out of current repository
+cd ../..
+
+# command 2: Purge everything
+rm -rf opensarlab-docker
+```
+
+This will purge everything in the `opensarlab-docker` repository. You will need to clone the repository again if you wish to run the IRIS.
+
+---
+
+## **Purge Docker**
+
+Lastly, you should purge all the IRIS related containers and images. You can do this with following commands:
+
+``` Docker
+######################## For Containers ########################
+
+# command 1: kill any IRIS related containers that are running. If you don't know the name or the ID, use `docker ps`
+docker container kill <name or ID of the container>
+
+
+# command 2: Purge all unused docker containers
+docker container prune
+
+######################## For Images ########################
+
+# command 1: Remove IRIS related images. If you don't know the name or ID of the image, use `docker images`
+docker rmi <name or ID of the image>
+
+# command 2: Purge all cached images
+docker image prune
+```
+
+_**Note: If you remove the image, you will have to rebuild the image again to use IRIS.**_
+
+
+To uninstall Docker, please refer to below methods:
+
+- [Windows](https://stackoverflow.com/a/51167323)
+- [macOS](https://stackoverflow.com/a/45595502)
+- [Ubuntu](https://askubuntu.com/a/1021506)
 
 ---
 
