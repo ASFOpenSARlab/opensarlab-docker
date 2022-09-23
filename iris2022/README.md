@@ -580,8 +580,10 @@ _**Note: If you remove the image, you will have to rebuild the image again to us
 To uninstall Docker, please refer to below methods:
 
 - [Windows](https://stackoverflow.com/a/51167323)
-- [macOS](https://stackoverflow.com/a/45595502)
+- [MacOS](https://stackoverflow.com/a/45595502)
 - [Ubuntu](https://askubuntu.com/a/1021506)
+
+_**Notes for Mac users:**_ _A disk image created for the Docker can automatically eject if the computer is turned off. If this is the case, you will need to reopen the disk image, i.e., `iris.dmg`, from wherever it was saved._
 
 ---
 
@@ -714,12 +716,46 @@ You can do something like this to make sure that it works:
 
 ---
 
-### __run `make` in the terminal → An error occurs at an intermediate step__
+### __Run `make` in the terminal → An error occurs at an intermediate step__
 
 _Solution:_
 
 - Close the Docker app and the terminal
 - Re-open both, and then run make in the terminal again (sometimes, closing and then re-opening things just works!) 
+
+---
+
+### __Cannot remove Docker images during uninstallation__
+
+_Solution:_
+
+When uninstalling, you may notice that the `docker rmi <image_id>` may not work. Here are some things you can do to remove them:
+
+- Remove containers related to the image you are trying to delete
+
+    Run the following command first to see if there are any images left:
+
+    ``` docker
+    # This command will reveal containers that stopped running.
+    docker ps -a
+    ```
+
+    If you see any containers that are related to the IRIS image, you will need to delete them first. You can do so with the following command:
+
+    ``` docker
+    docker container rm <container_id related to IRIS>
+    ```
+
+    Once you remove the container, you should be able to remove the IRIS image.
+
+- Forcefully remove a Docker image
+
+    If you are still having an issue, you can forcefully remove an image with the following command:
+
+    ``` docker
+    docker rmi -f <image_id> 
+    ```
+    
 
 ---
 ## **If You Encounter Issues**
