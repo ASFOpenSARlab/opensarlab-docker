@@ -555,7 +555,7 @@ This will purge everything in the `opensarlab-docker` repository. You will need 
 
 Lastly, you should purge all the IRIS related containers and images. You can do this with following commands:
 
-``` Docker
+``` docker
 ######################## For Containers ########################
 
 # command 1: kill any IRIS related containers that are running. If you don't know the name or the ID, use `docker ps`
@@ -565,7 +565,7 @@ docker container kill <name or ID of the container>
 # command 2: Purge all unused docker containers
 docker container prune
 
-######################## For Images ########################
+######################## For Images ###########################
 
 # command 1: Remove IRIS related images. If you don't know the name or ID of the image, use `docker images`
 docker rmi <name or ID of the image>
