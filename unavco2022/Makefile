@@ -7,12 +7,18 @@
 
 start: check build run 
 
+sudo: check build runsudo
+
 build:
 	docker build -f dockerfile -t unavco2022:latest .
 
-
 run:
 	docker run -it --rm -p 8888:8888 \
+	-v ${PWD}/virtual_home:/home/jovyan unavco2022:latest
+
+runsudo:
+	docker run -it --rm -p 8888:8888 \
+	--user root \
 	-v ${PWD}/virtual_home:/home/jovyan unavco2022:latest
 
 check:

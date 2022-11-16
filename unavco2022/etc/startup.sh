@@ -10,6 +10,32 @@ python -m pip install --user \
 python=$(python --version 2>&1)
 v=$(echo $python | cut -d'.' -f 2)
 
+
+################### remove cache ###################
+if [ -d "/opt/conda/pkgs/cache" ] 
+then
+    rm -rf /opt/conda/pkgs/cache
+fi
+################### remove cache ###################
+
+# ##################### condarc #######################
+# CONDARC=$HOME/.condarc	
+# if ! test -f "$CONDARC"; then	
+# cat <<EOT > $CONDARC	
+# channels:	
+#   - conda-forge	
+#   - defaults	
+# channel_priority: strict	
+# envs_dirs:	
+#   - /home/jovyan/.local/envs	
+#   - /opt/conda/envs	
+# EOT	
+# fi
+
+# conda init
+# ##################### condarc #######################
+
+
 # Add Path to local pip execs.
 export PATH=$HOME/.local/bin:$PATH
 

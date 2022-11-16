@@ -3,8 +3,10 @@ channels:
   - conda-forge
   - pyrocko
 dependencies:
-  - python>=3.7,<3.9
+  # - python>=3.7,<3.9
+  - python>=3.8,<3.9
   - boto3
+  #- cartopy==0.21.0 # new modification
   - cartopy
   - cdsapi
   - cvxopt
@@ -13,10 +15,13 @@ dependencies:
   - dask-jobqueue>=0.3
   - defusedxml
   - ecCodes
-  - hyp3lib=1.4.1
+  # - hyp3lib=1.4.1
+  - hyp3lib=1.7.0
   - hyp3_sdk
-  - ipympl==0.8.8
-  - isce2==2.6.0
+  # - ipympl==0.8.8
+  - ipympl==0.9.2
+  # - isce2==2.6.0
+  - isce2==2.6.1
   - joblib
   - jupyter
   - kernda
@@ -37,6 +42,7 @@ dependencies:
   - pyrocko
   - scikit-image
   - scipy
+  - setuptools_scm[toml]>=6.2 # for cartopy
   - shapely
   - traitlets==5.1.1
   - utm
@@ -51,4 +57,5 @@ dependencies:
     # - okada_wrapper
     - platemotion
     - sardem
+    # - setuptools_scm[toml]>=6.2 # for cartopy
     - url-widget

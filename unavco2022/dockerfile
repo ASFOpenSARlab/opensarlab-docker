@@ -44,7 +44,9 @@ RUN apt-get update && \
         emacs \
         gnupg2 \
         jq \
-        gfortran
+        gfortran \
+        g++ 
+# g++ for cartopy
 
 RUN apt install texlive-xetex texlive-fonts-recommended texlive-plain-generic -y
 
@@ -72,13 +74,17 @@ RUN addgroup -gid 599 elevation \
 RUN apt-get update && \
     rm -rf /var/lib/apt/lists/* && \
     apt-get autoremove -y && \
-    conda clean --yes --all
+    mamba clean --yes --all
+
+    # conda clean --yes --all
 
 # Clean up a few other things at the end
 RUN apt-get update && \
     rm -rf /var/lib/apt/lists/* && \
     apt-get autoremove -y && \
-    conda clean --yes --all
+    mamba clean --yes --all
+
+    # conda clean --yes --all
 
 # Make sure mamba (within conda) has write access
 RUN chmod -R 777 /opt/conda/pkgs/
@@ -98,7 +104,8 @@ RUN SETTINGS=/opt/conda/share/jupyter/lab/settings && \
 
 RUN rm -rf /home/jovyan/..?* /home/jovyan/.[!.]* /home/jovyan/*
 WORKDIR /home/jovyan
-RUN conda init
+# RUN conda init
+RUN mamba init
 
 COPY env /etc/env
 RUN chmod -R 755 /etc/env && \
@@ -107,6 +114,7 @@ RUN chmod -R 755 /etc/env && \
 RUN mkdir /aria
 
 ENV UNAVCO="unavco"
+
 RUN mamba env create -f /etc/env/unavco.yml && \
     mamba run -n $UNAVCO kernda -o --display-name $UNAVCO /opt/conda/envs/$UNAVCO/share/jupyter/kernels/python3/kernel.json && \
     source /etc/env/unavco_env.sh && \
@@ -132,6 +140,7 @@ COPY etc/startup.sh ${UNAVCO_FILES}/startup.sh
 
 # ISCE path & files:
 ENV OPT_PATH="/opt/conda/envs/unavco/lib/python3.8/site-packages/isce"
+# ENV OPT_PATH="/opt/conda/envs/unavco/lib/python3.9/site-packages/isce"
 
 RUN git clone https://github.com/isce-framework/isce2.git && \
     mv ./isce2/components/isceobj/Alos2Proc/runDownloadDem.py  ${OPT_PATH}/components/isceobj/Alos2Proc/runDownloadDem.py && \
