@@ -6,8 +6,8 @@ dependencies:
   # - python>=3.7,<3.9
   - python>=3.8,<3.9
   - boto3
-  #- cartopy==0.21.0 # new modification
-  - cartopy
+  # - cartopy>=0.20.2 # new modification
+  - cartopy==0.21.0
   - cdsapi
   - cvxopt
   - cython
@@ -49,13 +49,10 @@ dependencies:
   - xarray
   - zarr
   - pip:
-    # - git+https://github.com/pyrocko/kite
     - okada_wrapper
-    - kite # pyrocko/kite
+    - kite
     - h5py<3
     - ipynb
-    # - okada_wrapper
     - platemotion
     - sardem
-    # - setuptools_scm[toml]>=6.2 # for cartopy
     - url-widget

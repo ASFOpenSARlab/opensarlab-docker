@@ -115,8 +115,10 @@ RUN mkdir /aria
 
 ENV UNAVCO="unavco"
 
+# mamba update --all may be the key
 RUN mamba env create -f /etc/env/unavco.yml && \
     mamba run -n $UNAVCO kernda -o --display-name $UNAVCO /opt/conda/envs/$UNAVCO/share/jupyter/kernels/python3/kernel.json && \
+    mamba update --all && \
     source /etc/env/unavco_env.sh && \
     mamba clean --yes --all && \
     chmod -R 755 /opt/conda/envs && \
@@ -140,7 +142,6 @@ COPY etc/startup.sh ${UNAVCO_FILES}/startup.sh
 
 # ISCE path & files:
 ENV OPT_PATH="/opt/conda/envs/unavco/lib/python3.8/site-packages/isce"
-# ENV OPT_PATH="/opt/conda/envs/unavco/lib/python3.9/site-packages/isce"
 
 RUN git clone https://github.com/isce-framework/isce2.git && \
     mv ./isce2/components/isceobj/Alos2Proc/runDownloadDem.py  ${OPT_PATH}/components/isceobj/Alos2Proc/runDownloadDem.py && \
