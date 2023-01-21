@@ -1,3 +1,7 @@
+# THE 2021 UNAVCO DOCKER IMAGE IS NO LONGER SUPPORTED. 
+
+---
+
 # Building the UNAVCO Docker Image and Running it in a Docker Container
 
 Note: M1 Macs are not currently supported.
