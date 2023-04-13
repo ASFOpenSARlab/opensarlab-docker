@@ -48,18 +48,15 @@ RUN apt-get update && \
 
 RUN apt install texlive-xetex texlive-fonts-recommended texlive-plain-generic -y
 
-# Install any other custom and jupyter libaries like widgets
-# Use pip (conda version) since we want to corner off GIAnT's work and also run it with Jupyter
-RUN conda update -n base conda mamba
+RUN curl micro.mamba.pm/install.sh | bash
 
-RUN mamba install -c conda-forge awscli boto3 pyyaml bokeh mamba_gator plotly
+RUN mamba install -c conda-forge awscli boto3 pyyaml bokeh mamba_gator plotly cryptography==38.0.4
 
 RUN mamba install -c conda-forge jupyter_contrib_nbextensions \
     jupyter-resource-usage nb_conda_kernels jupyterlab-spellchecker \
     ipympl kernda
 
-RUN python -m pip install url-widget opensarlab-doc-link \
-    opensarlab_controlbtn opensarlab-notifications==0.1.4 opensarlab-theme-light
+RUN python -m pip install url-widget opensarlab-theme-light
 
 # Make sure that any files in the home directory are jovyan permission
 RUN chown -R jovyan:users $HOME/
