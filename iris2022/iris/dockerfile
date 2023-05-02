@@ -172,6 +172,7 @@ RUN apt install -y \
     xorg \
     xfce4 \
     firefox \
+    ## temp: comment out patch
     patch
 
 ARG TURBOVNC_VERSION=3.0
@@ -183,9 +184,11 @@ RUN wget -q "https://sourceforge.net/projects/turbovnc/files/${TURBOVNC_VERSION}
 
 RUN git clone https://github.com/jupyterhub/jupyter-remote-desktop-proxy.git /opt/install
 
+## temp: comment out patch
 COPY pkgs/vnc_patches/vnc.patch /opt/install/vnc.patch
 RUN cd /opt/install && \
-    patch -p1 < vnc.patch
+    patch -p1 < new_vnc.patch
+    # patch -p1 < vnc.patch
 
 RUN fix-permissions /opt/install && \
     cd /opt/install && \
