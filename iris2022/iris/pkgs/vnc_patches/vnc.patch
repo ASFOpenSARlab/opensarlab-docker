@@ -1,20 +1,20 @@
-diff --git a/jupyter_desktop/__init__.py b/jupyter_desktop/__init__.py
-index 856ff15..58fcbba 100644
---- a/jupyter_desktop/__init__.py
-+++ b/jupyter_desktop/__init__.py
-@@ -31,7 +31,7 @@ def setup_desktop():
-     vnc_command = ' '.join(shlex.quote(p) for p in (vnc_args + [
-         '-verbose',
-         '-xstartup', os.path.join(HERE, 'share/xstartup'),
--        '-geometry', '1680x1050',
-+        '-geometry', '2000x1200',
-         '-SecurityTypes', 'None',
-         '-fg',
-         ':1',
-diff --git a/jupyter_desktop/share/web/noVNC-1.2.0/vnc_lite.html b/jupyter_desktop/share/web/noVNC-1.2.0/vnc_lite.html
-index a9e3e9b..acd593c 100644
---- a/jupyter_desktop/share/web/noVNC-1.2.0/vnc_lite.html
-+++ b/jupyter_desktop/share/web/noVNC-1.2.0/vnc_lite.html
+diff --git a/jupyter_remote_desktop_proxy/__init__.py b/jupyter_remote_desktop_proxy/__init__.py
+index b3f7714..8a742c6 100644
+--- a/jupyter_remote_desktop_proxy/__init__.py
++++ b/jupyter_remote_desktop_proxy/__init__.py
+@@ -36,7 +36,7 @@ def setup_desktop():
+                 '-xstartup',
+                 os.path.join(HERE, 'share/xstartup'),
+                 '-geometry',
+-                '1680x1050',
++                '2000x1200',
+                 '-SecurityTypes',
+                 'None',
+                 '-fg',
+diff --git a/jupyter_remote_desktop_proxy/share/web/noVNC-1.2.0/vnc_lite.html b/jupyter_remote_desktop_proxy/share/web/noVNC-1.2.0/vnc_lite.html
+index 14a0313..94e5022 100644
+--- a/jupyter_remote_desktop_proxy/share/web/noVNC-1.2.0/vnc_lite.html
++++ b/jupyter_remote_desktop_proxy/share/web/noVNC-1.2.0/vnc_lite.html
 @@ -47,7 +47,7 @@
          #status {
              text-align: center;
@@ -24,7 +24,7 @@ index a9e3e9b..acd593c 100644
              position: fixed;
              top: 0px;
              right: 0px;
-@@ -105,11 +105,11 @@
+@@ -135,11 +135,11 @@
              desktopName = e.detail.name;
          }
  
@@ -41,7 +41,7 @@ index a9e3e9b..acd593c 100644
              return false;
          }
  
-@@ -138,8 +138,8 @@
+@@ -168,8 +168,8 @@
              return defaultValue;
          }
  
@@ -52,10 +52,10 @@ index a9e3e9b..acd593c 100644
  
          // Read parameters specified in the URL query string
          // By default, use the host and port of server that served this file
-@@ -188,7 +188,7 @@
- <body>
-     <div id="top_bar">
-         <div id="status">Loading</div>
+@@ -249,7 +249,7 @@
+             </div>
+         </div>
+ 
 -        <div id="sendCtrlAltDelButton">Send CtrlAltDel</div>
 +        <div id="jupyterLabPageButton">Go to JupyterLab</div>
      </div>
