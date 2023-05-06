@@ -1,3 +1,4 @@
+#! /usr/bin/env bash
 # RUN AS ROOT
 
 # Change permissions of /home/jovyan to jovyan:users
