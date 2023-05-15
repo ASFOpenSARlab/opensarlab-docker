@@ -1,0 +1,248 @@
+FROM jupyter/base-notebook:hub-1.4.2 as release
+
+# Base Stage ****************************************************************
+USER root
+WORKDIR /
+
+RUN set -ve
+
+RUN apt update && \
+    apt install --no-install-recommends -y \
+        software-properties-common \
+        git && \
+    add-apt-repository -y ppa:ubuntugis/ubuntugis-unstable && \
+    apt update && \
+    apt upgrade -y
+
+COPY tests/* /tests/
+
+# SNAP  ****************************************************************
+RUN apt install --no-install-recommends -y \
+    default-jdk-headless
+
+# TRAIN  ****************************************************************
+RUN apt install --no-install-recommends -y \
+    gdal-bin
+
+COPY TRAIN/ /usr/local/TRAIN/
+
+RUN apt install -y \
+    proj-bin \
+    geotiff-bin \
+    libshp-dev \
+    libshp2 \
+    libhdf5-dev \
+    libnetcdf-dev \
+    libgdal-dev \
+    libgsl-dev
+
+# Install general items. If a library is needed for a specific piece of software, put it with that software.
+RUN apt update && \
+    apt install --fix-missing --no-install-recommends -y \
+        zip \
+        unzip \
+        wget \
+        vim \
+        rsync \
+        less \
+        snaphu \
+        curl \
+        openssh-client \
+        libgl1-mesa-glx \
+        emacs \
+        gnupg2 \
+        jq \
+        gfortran \
+        command-not-found \
+        tcsh \
+        gedit \
+        gv
+
+# Update conda and mamba: this breaks things in the hook, need to play with it more
+RUN conda install conda=4.12.0 && \
+    conda update -n base mamba
+
+RUN mamba install -c conda-forge awscli boto3 pyyaml bokeh mamba_gator
+
+# Install jupyter libaries
+RUN mamba install -c conda-forge jupyter_contrib_nbextensions jupyter-resource-usage nb_conda_kernels jupyterlab-spellchecker ipympl kernda
+
+#install dask libraries
+RUN mamba install -c conda-forge dask-gateway dask distributed -y
+
+# Install OpenSARlab's widgets and extensions
+RUN python -m pip install url-widget opensarlab-profile-label opensarlab-doc-link opensarlab_controlbtn opensarlab-theme-light
+
+# Make sure that any files in the home directory are jovyan permission
+RUN chown -R jovyan:users $HOME/
+
+# Add sudo group user 599 elevation
+RUN addgroup -gid 599 elevation \
+    && echo '%elevation ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers
+
+# Clean up a few other things at the end
+RUN apt update && \
+    rm -rf /var/lib/apt/lists/* && \
+    apt autoremove -y
+
+# Make sure mamba (within conda) has write access
+RUN chmod -R 777 /opt/conda/pkgs/
+
+# Use the kernel display name `base` for the base conda environment
+RUN mamba run -n base kernda --display-name base -o /opt/conda/share/jupyter/kernels/python3/kernel.json
+
+# Set the default theme to opensarlab-theme-light to avoid issues with built-in light theme and status bar
+# Remove the logout option from the main menu to steer users to the hub control panel
+# Remove the launch classic notebook option to avoid broken classic terminals and image loading errors
+RUN SETTINGS=/opt/conda/share/jupyter/lab/settings && \
+    mkdir -p $SETTINGS && \
+    OVERRIDES=$SETTINGS/overrides.json && \
+    TEMP=$SETTINGS/temp && \
+    echo '{"@jupyterlab/apputils-extension:themes": {"theme": "opensarlab-theme-light"}}' > $OVERRIDES && \
+    jq '. += {"@jupyterlab/mainmenu-extension:plugin": {"menus": [{"id": "jp-mainmenu-file", "items": [{"command": "hub:logout", "disabled": true}]}]}}' $OVERRIDES > $TEMP && \
+    jq '.["@jupyterlab/mainmenu-extension:plugin"].menus[1] |= {"id": "jp-mainmenu-help", "items": [{"command": "help:launch-classic-notebook", "disabled": true}]}' $TEMP > $OVERRIDES && \
+    jq '. += {"jupyterlab-topbar-extension:plugin": {"order": ["spacer", "opensarlab_profile_label", "doc_link", "server-btn"]}}' $OVERRIDES > $TEMP && \
+    mv $TEMP $OVERRIDES
+
+RUN rm -rf /home/jovyan/..?* /home/jovyan/.[!.]* /home/jovyan/*
+
+WORKDIR /home/jovyan
+RUN conda init
+
+# Add jupyter hooks
+COPY envs /etc/envs
+RUN chmod -R 755 /etc/envs && \
+    chown -R jovyan:users /etc/envs
+
+# Setup IRIS conda env
+ENV IRIS="iris"
+RUN mamba env create -f /etc/envs/iris_env.yml && \
+    mamba run -n "$IRIS" kernda -o --display-name "$IRIS" /opt/conda/envs/"$IRIS"/share/jupyter/kernels/python3/kernel.json && \
+    mamba clean --yes --all && \
+    chmod -R 755 /opt/conda/envs && \
+    chown -R jovyan:users /opt/conda/envs
+
+# Install FETCH files
+RUN wget --no-check-certificate -O /usr/local/bin/FetchData https://seiscode.iris.washington.edu/attachments/download/1352/FetchData-2020.314 && \
+    wget --no-check-certificate -O /usr/local/bin/FetchSyn https://seiscode.iris.washington.edu/attachments/download/857/FetchSyn-2016.007 && \
+    wget --no-check-certificate -O /usr/local/bin/FetchEvent https://seiscode.iris.washington.edu/attachments/download/638/FetchEvent-2014.340 && \
+    wget --no-check-certificate -O /usr/local/bin/FetchMetadata https://seiscode.iris.washington.edu/attachments/download/625/FetchMetadata-2014.316 && \
+    chmod +x /usr/local/bin/FetchData && \
+    chmod +x /usr/local/bin/FetchSyn && \
+    chmod +x /usr/local/bin/FetchEvent && \
+    chmod +x /usr/local/bin/FetchMetadata
+
+RUN apt update && \
+    apt install -y make && \
+    wget -O - http://cpanmin.us | perl - --self-upgrade && \
+    cpanm LWP XML::SAX
+
+# SAC ######################
+RUN mkdir /tmp/sac
+COPY pkgs/sac/* /tmp/sac/
+
+RUN cd /tmp/sac && \
+    tar -xf /tmp/sac/sac-102.0.tar.gz -C /tmp/sac && \
+    cd sac-102.0 && \
+    apt update && \
+    apt install -y \
+        "make" \
+        libncurses-dev \
+        libx11-dev
+RUN cd /tmp/sac/sac-102.0/ && \
+    mkdir -p build && \
+    cd build && \
+    ../configure --prefix=/usr/local/sac --enable-editline && \
+    make && \
+    make install && \
+    rm -rf /tmp/sac
+ENV SACHOME "/usr/local/sac"
+RUN conda env config vars set -n iris SACHOME=${SACHOME}
+RUN echo -n "source \${SACHOME}/bin/sacinit.csh" > /etc/csh/cshrc.d/sacinit.csh
+
+# mseed2sac
+RUN cd /usr/local && \
+    git clone https://github.com/iris-edu/mseed2sac.git && \
+    cd /usr/local/mseed2sac && \
+    make
+
+# Jupyter Desktop ####################
+RUN apt install -y \
+    dbus-x11 \
+    xorg \
+    xfce4 \
+    firefox \
+    patch
+
+ARG TURBOVNC_VERSION=3.0
+RUN wget -q "https://sourceforge.net/projects/turbovnc/files/${TURBOVNC_VERSION}/turbovnc_${TURBOVNC_VERSION}_amd64.deb/download" -O turbovnc_${TURBOVNC_VERSION}_amd64.deb && \
+    apt-get install -y -q ./turbovnc_${TURBOVNC_VERSION}_amd64.deb && \
+    apt-get remove -y -q light-locker && \
+    rm ./turbovnc_${TURBOVNC_VERSION}_amd64.deb && \
+    ln -s /opt/TurboVNC/bin/* /usr/local/bin/
+
+RUN git clone https://github.com/jupyterhub/jupyter-remote-desktop-proxy.git /opt/install
+
+COPY pkgs/vnc_patches/vnc.patch /opt/install/vnc.patch
+RUN cd /opt/install && \
+    patch -p1 < vnc.patch
+
+RUN fix-permissions /opt/install && \
+    cd /opt/install && \
+    mamba env update -n base --file environment.yml
+
+# MAN Pages ##########################
+# Comment out the line excluding /usr/share/man/* from /etc/dpkg/dpkg.cfg.d/excludes
+RUN sed -e '\|/usr/share/man|s|^#*|#|g' -i /etc/dpkg/dpkg.cfg.d/excludes
+
+# install packages needed for man-db
+RUN apt update && \
+    apt-get clean && \
+    apt install --fix-missing --no-install-recommends -y \
+        apt-utils \
+        dialog \
+        manpages \
+        manpages-posix \
+        man-db
+
+# remove man diversions created by minimize
+RUN rm -f /usr/bin/man && \
+    dpkg-divert --quiet --remove --rename /usr/bin/man && \
+    rm -f /usr/share/man/man1/sh.1.gz && \
+    dpkg-divert --quiet --remove --rename /usr/share/man/man1/sh.1.gz
+
+# Install TauP ###########################
+ENV TAUPPATH "/usr/local/TauP-2.6.0"
+RUN conda env config vars set -n iris TAUPPATH="${TAUPPATH}"
+
+RUN cd /usr/local && \
+    wget http://www.seis.sc.edu/downloads/TauP/TauP-2.6.0.tgz && \
+    tar -zxf TauP-2.6.0.tgz && \
+    rm TauP-2.6.0.tgz && \
+    cd /usr/local/TauP-2.6.0 && \
+    bash gradlew
+
+# Install mseed #############################
+ENV PTH "/usr/bin:/usr/local/mseed2sac:/usr/local/TauP-2.6.0:/usr/local/TauP-2.6.0/bin:/usr/local/sac/bin:/opt/conda/envs/iris/bin:${PATH}"
+RUN conda env config vars set -n iris PATH="${PTH}"
+
+# Copy singleuser files
+COPY singleuser/hooks/iris.sh /etc/jupyter-hooks/iris.sh
+COPY singleuser/others/check_storage.py /etc/jupyter-hooks/resource_checks/check_storage.py
+COPY singleuser/custom_magics/00-df.py /etc/jupyter-hooks/custom_magics/00-df.py
+COPY singleuser/templates/tree.html /etc/jupyter-hooks/templates/tree.html
+COPY singleuser/templates/page.html /etc/jupyter-hooks/templates/page.html
+RUN chmod -R 777 /etc/jupyter-hooks/
+
+# Copy entrypoint and cmd 
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod 755 /entrypoint.sh
+COPY --chown=1000:100 cmd.sh /cmd.sh
+RUN chmod 755 /cmd.sh
+
+ENTRYPOINT ["/entrypoint.sh"]
+CMD ["/cmd.sh"]
+
+FROM release as testing 
+
+RUN bash /tests/iris.sh
