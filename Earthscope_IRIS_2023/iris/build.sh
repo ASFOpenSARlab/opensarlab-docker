@@ -1,7 +1,7 @@
 
 set -ex
 
-IMAGE_NAME=iris2022
+IMAGE_NAME=iris2023
 
 [ -e download.sh ] && bash download.sh
 

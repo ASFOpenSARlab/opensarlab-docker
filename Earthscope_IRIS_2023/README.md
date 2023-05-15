@@ -1,36 +1,43 @@
 # **Building the IRIS Docker Image and Running it in a Docker Container**
 
 ## *Table of Contents*
+- [**Building the IRIS Docker Image and Running it in a Docker Container**](#building-the-iris-docker-image-and-running-it-in-a-docker-container)
+  - [*Table of Contents*](#table-of-contents)
 - [**Installation**](#installation)
-    - [Install WSL2 (Windows)](#install-wsl2)
-    - [Install Docker](#install-docker)
-    - [Install Git](#install-git)
+  - [**Install WSL2**](#install-wsl2)
+  - [**Install Docker**](#install-docker)
+  - [**Install Git**](#install-git)
 - [**Environment Set Up**](#environment-set-up)
-    - [Create a Case-Sensitive Disc Image (MacOS)](#create-a-case-sensitive-disc-image)
-    - [Before Cloning the Git Repository](#before-cloning-the-git-repository)
-        - [Windows](#windows)
-        - [MacOS](#macos)
-        - [Ubuntu](#ubuntu)
-    - [Cloning Repository](#cloning-repository)
-        - [ssh](#ssh)
-        - [https](#https)
-    - [Move to the IRIS Directory](#move-to-the-iris-directory)
+  - [Create a Case-Sensitive Disc Image](#create-a-case-sensitive-disc-image)
+  - [**Before Cloning the Git Repository**](#before-cloning-the-git-repository)
+    - [**Windows**:](#windows)
+    - [**MacOS**](#macos)
+    - [**Ubuntu**](#ubuntu)
+  - [**Cloning Repository**](#cloning-repository)
+    - [**ssh**](#ssh)
+    - [**https**](#https)
+  - [**Move to the IRIS Directory**](#move-to-the-iris-directory)
 - [**Running IRIS**](#running-iris)
-    - [Image Build and Run](#image-build-and-run)
-        - [(Optional) Build the Image Without Running](#optional-build-the-image-without-running)
-        - [(Optional) Run Container Without Rebuilding](#optional-run-container-without-rebuilding)
-    - [IRIS Container](#iris-container)
-        - [Open Jupyter in Your Browser](#open-jupyter-in-your-browser)
-        - [Stop Your Container](#stop-your-container)
-        - [Run the Container Again](#run-the-container-again)
+  - [**Image Build and Run**](#image-build-and-run)
+    - [**Starting IRIS Deployment**](#starting-iris-deployment)
+    - [**(Optional) Build the Image Without Running**](#optional-build-the-image-without-running)
+    - [**(Optional) Run Container Without Rebuilding**](#optional-run-container-without-rebuilding)
+  - [**IRIS Container**](#iris-container)
+    - [**Open Jupyter in Your Browser**](#open-jupyter-in-your-browser)
+    - [**Stopping Your Container**](#stopping-your-container)
+    - [**Run the Container Again**](#run-the-container-again)
 - [**Migrating from OSL to Docker**](#migrating-from-osl-to-docker)
-    - [Compress Directories to a Zip File](#compress-directories-to-a-zip-file)
-    - [Download Zip File to Your Computer](#download-zip-file-to-your-computer)
-    - [Copy Zipped File to Docker](#copy-zipped-file-to-docker)
-    - [Unzip the Zipped File](#unzip-the-zipped-file)
+  - [**Compress Directories to a Zip File**](#compress-directories-to-a-zip-file)
+  - [**Download Zip File to Your Computer**](#download-zip-file-to-your-computer)
+  - [**Copy Zipped File to Docker**](#copy-zipped-file-to-docker)
+  - [**Unzip the Zipped File**](#unzip-the-zipped-file)
 - [**Troubleshooting**](#troubleshooting)
-    - [Common Issues](#common-issues)
-    - [If You Encounter Issues](#if-you-encounter-issues)
+  - [**Common Issues**](#common-issues)
+    - [__Issue on Installing/Running Docker__](#issue-on-installingrunning-docker)
+    - [__Permission Denied with `ssh`__](#permission-denied-with-ssh)
+    - [__run `make` in the terminal → Cannot connect to the Docker daemon__](#run-make-in-the-terminal--cannot-connect-to-the-docker-daemon)
+    - [__run `make` in the terminal → An error occurs at an intermediate step__](#run-make-in-the-terminal--an-error-occurs-at-an-intermediate-step)
+  - [**If You Encounter Issues**](#if-you-encounter-issues)
 ---
 
 
@@ -196,7 +203,7 @@ The process of cloning the repository differs based on the Operating System you 
 
 You will be cloning from ASF's [opensarlab-docker](https://github.com/ASFOpenSARlab/opensarlab-docker) repository. Make sure that you are in `main` branch. 
 
-_**Note: When you clone this repository, you will only be using the `iris2022` directory. Ignore the `unavco2021/2022` directory.**_
+_**Note: When you clone this repository, you will only be using the `Earthscope_IRIS_2023` directory. Ignore the other directories.**_
 
 There are two different ways of cloning a repository: You can clone by using `ssh` or using `https`.
 
@@ -236,7 +243,7 @@ This will also clone the `opensarlab-docker` repository to where you are current
 Once you cloned your repository, run the following command to change into proper location:
 
 ```bash
-cd opensarlab-docker/iris2022
+cd opensarlab-docker/Earthscope_IRIS_2023
 ```
 
 If you are in the right location, you should see a `Makefile`. You can verify this with the following command:
@@ -442,7 +449,7 @@ Now that you have a zipped file, you should be able to download them from OSL to
 
 Now that you have downloaded a copy of the `OSLdata.zip` file, you should move them to your Docker container.
 
-1. Move the `OSLdata.zip` file to the `/Volumes/IRIS/opensarlab-docker/iris2022/virtual_home` directory.
+1. Move the `OSLdata.zip` file to the `/Volumes/IRIS/opensarlab-docker/Earthscope_IRIS_2023/virtual_home` directory.
 
 This directory is connected to the Docker container, so any files you save there will also appear within your Docker. Likewise, any files you create within the Docker will appear in that directory.
 
@@ -569,7 +576,7 @@ When you try to run `make` command, you may see errors like this:
 
 ```bash
 cd iris && bash build.sh 2>&1 | tee log
-+ IMAGE_NAME=iris2022
++ IMAGE_NAME=iris2023
 + '[' -e download.sh ']'
 + bash download.sh
 Cloning into 'TRAIN'...
@@ -583,7 +590,7 @@ warning: unable to access '/Users/<username>/.config/git/attributes': Permission
 Cannot connect to the Docker daemon at unix:///var/run/docker.sock. Is the docker daemon running?
 bash start_container.sh 2>&1 | tee log
 ++ pwd
-+ docker run -it --init --rm -p 8888:8888 -v /Volumes/IRIS/opensarlab-docker/iris2022/virtual_home:/home/jovyan iris2022:latest
++ docker run -it --init --rm -p 8888:8888 -v /Volumes/IRIS/opensarlab-docker/iris2023/virtual_home:/home/jovyan iris2023:latest
 docker: Cannot connect to the Docker daemon at unix:///var/run/docker.sock. Is the docker daemon running?.
 See 'docker run --help'.
 ```
@@ -609,4 +616,4 @@ _Solution:_
 ## **If You Encounter Issues**
 ---
 - Please reach out for support
-- Support contact: uaf-jupyterhub-asf+IRIS2022@alaska.edu
+- Support contact: uaf-jupyterhub-asf+IRIS2023@alaska.edu
