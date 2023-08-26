@@ -1,4 +1,4 @@
-FROM jupyter/base-notebook:hub-1.4.2 as release
+FROM jupyter/base-notebook:ubuntu-20.04 as release
 
 # Base Stage ****************************************************************
 USER root
@@ -59,8 +59,8 @@ RUN apt update && \
         gv
 
 # Update conda and mamba: this breaks things in the hook, need to play with it more
-RUN conda install conda=4.12.0 && \
-    conda update -n base mamba
+#RUN conda install conda=4.12.0
+RUN conda update -n base mamba
 
 RUN mamba install -c conda-forge awscli boto3 pyyaml bokeh mamba_gator
 
