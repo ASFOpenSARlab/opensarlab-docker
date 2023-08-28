@@ -3,8 +3,6 @@ set -ve
 
 HOME=/home/jovyan
 
-python /etc/jupyter-hooks/resource_checks/check_storage.py $1
-
 # Add Path to local pip execs.
 export PATH=$HOME/.local/bin:$PATH
 
@@ -14,13 +12,6 @@ jupyter labextension disable @jupyterlab/extensionmanager-extension
 
 mkdir -p $HOME/.ipython/profile_default/startup/
 cp /etc/jupyter-hooks/custom_magics/00-df.py $HOME/.ipython/profile_default/startup/00-df.py
-
-# Update page and tree
-mv /opt/conda/lib/python3.9/site-packages/notebook/templates/tree.html /opt/conda/lib/python3.9/site-packages/notebook/templates/original_tree.html
-cp /etc/jupyter-hooks/templates/tree.html /opt/conda/lib/python3.9/site-packages/notebook/templates/tree.html
-
-mv /opt/conda/lib/python3.9/site-packages/notebook/templates/page.html /opt/conda/lib/python3.9/site-packages/notebook/templates/original_page.html
-cp /etc/jupyter-hooks/templates/page.html /opt/conda/lib/python3.9/site-packages/notebook/templates/page.html
 
 CONDARC=$HOME/.condarc
 if ! test -f "$CONDARC"; then

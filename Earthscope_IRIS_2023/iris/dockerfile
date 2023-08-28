@@ -230,11 +230,10 @@ RUN conda env config vars set -n iris PATH="${PTH}"
 
 # Copy singleuser files
 COPY singleuser/hooks/iris.sh /etc/jupyter-hooks/iris.sh
-COPY singleuser/others/check_storage.py /etc/jupyter-hooks/resource_checks/check_storage.py
 COPY singleuser/custom_magics/00-df.py /etc/jupyter-hooks/custom_magics/00-df.py
-COPY singleuser/templates/tree.html /etc/jupyter-hooks/templates/tree.html
-COPY singleuser/templates/page.html /etc/jupyter-hooks/templates/page.html
 RUN chmod -R 777 /etc/jupyter-hooks/
+
+ENV SHELL /bin/tcsh
 
 # Copy entrypoint and cmd 
 COPY entrypoint.sh /entrypoint.sh
