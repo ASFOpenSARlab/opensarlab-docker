@@ -1,7 +1,7 @@
-# **Building the IRIS Docker Image and Running it in a Docker Container**
+# **Building the EarthScope InSAR Docker Image and Running it in a Docker Container**
 
 ## *Table of Contents*
-- [**Building the IRIS Docker Image and Running it in a Docker Container**](#building-the-iris-docker-image-and-running-it-in-a-docker-container)
+- [**Building the EarthScope InSAR Docker Image and Running it in a Docker Container**](#building-the-insar-docker-image-and-running-it-in-a-docker-container)
   - [*Table of Contents*](#table-of-contents)
 - [**Installation**](#installation)
   - [**Install WSL2**](#install-wsl2)
@@ -16,13 +16,13 @@
   - [**Cloning Repository**](#cloning-repository)
     - [**ssh**](#ssh)
     - [**https**](#https)
-  - [**Move to the IRIS Directory**](#move-to-the-iris-directory)
-- [**Running IRIS**](#running-iris)
+  - [**Move to the EarthScope InSAR Directory**](#move-to-the-insar-directory)
+- [**Running EarthScope InSAR**](#running-insar)
   - [**Image Build and Run**](#image-build-and-run)
-    - [**Starting IRIS Deployment**](#starting-iris-deployment)
+    - [**Starting EarthScope InSAR Deployment**](#starting-insar-deployment)
     - [**(Optional) Build the Image Without Running**](#optional-build-the-image-without-running)
     - [**(Optional) Run Container Without Rebuilding**](#optional-run-container-without-rebuilding)
-  - [**IRIS Container**](#iris-container)
+  - [**EarthScope InSAR Container**](#insar-container)
     - [**Open Jupyter in Your Browser**](#open-jupyter-in-your-browser)
     - [**Stopping Your Container**](#stopping-your-container)
     - [**Run the Container Again**](#run-the-container-again)
@@ -44,7 +44,7 @@
 
 # **Installation**
 
-In this section, we will provide brief guides on how to set up an environment to run the IRIS Dockerfile.
+In this section, we will provide brief guides on how to set up an environment to run the EarthScope InSAR Dockerfile.
 
 
 In short, here are the list of things you will need to set up:
@@ -102,7 +102,7 @@ If you get an error on basic commands, such as `docker ps`, you may need to trou
     - [Instructions on how to set your ssh key to GitHub](https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account).
   
 
-_**Note: Setting `ssh` keys is optional since you can still run the IRIS Docker image by cloning with `https`. However, generating and adding an `ssh` key is more convenient in a long run.**_
+_**Note: Setting `ssh` keys is optional since you can still run the EarthScope InSAR Docker image by cloning with `https`. However, generating and adding an `ssh` key is more convenient in a long run.**_
 
 ---
 
@@ -112,7 +112,7 @@ Assuming you have completed the installation, this section will provide a genera
 
 In this section, you will:
 - Create a Case-Sensitive Disc Image (MacOS only)
-- Clone Git repository for IRIS
+- Clone Git repository for EarthScope InSAR
 
 ---
 
@@ -141,11 +141,11 @@ _**Note: This only applies to MacOS.**_
   
     - Fill out the image details
         - `Save As`
-            - name of the `.dmg` file the image will be saved to (IRIS)
+            - name of the `.dmg` file the image will be saved to (EarthScope InSAR)
         - `Where`
             - directory where `.dmg` will be saved (wherever you like)
         - `Name`
-            - name of the image itself (IRIS)
+            - name of the image itself (EarthScope InSAR)
         - `Size`
             - amount of space available on the image (should be large enough to hold your environment and data)
         - `Format`
@@ -153,17 +153,17 @@ _**Note: This only applies to MacOS.**_
         - Leave remaining fields set to their default values
     - Click the `Save` button
     
-    ![iris create image](img/iris_create_image.png)
+    ![EarthScope InSAR create image](img/iris_create_image.png)
  
 - Open a terminal
   - change directories into your mounted volume (created from your new disc image)
-    - `cd /Volumes/IRIS`
+    - `cd /Volumes/EarthScope InSAR`
   - confirm case-sensitivity by creating two directories or files whose name differ only in capitalization
     - `mkdir a`
     - `mkdir A`
     - if you are able to create both files or directories, the file system is case-sensitive
     
-    ![iris confirm case sensitivity](img/iris_confirm_case_sensitive.png)
+    ![EarthScope InSAR confirm case sensitivity](img/iris_confirm_case_sensitive.png)
      
 ---
 ## **Before Cloning the Git Repository**
@@ -181,7 +181,7 @@ The process of cloning the repository differs based on the Operating System you 
 ### **MacOS**
 ---
 - In a terminal, move to the case-sensitive volume you created using the instructions above
-    - `cd /Volumes/IRIS`
+    - `cd /Volumes/EarthScope InSAR`
 - Run the git clone command. Refer to the _cloning repository_ section for more detail.
 
 ---
@@ -203,7 +203,7 @@ The process of cloning the repository differs based on the Operating System you 
 
 You will be cloning from ASF's [opensarlab-docker](https://github.com/ASFOpenSARlab/opensarlab-docker) repository. Make sure that you are in `main` branch. 
 
-_**Note: When you clone this repository, you will only be using the `Earthscope_IRIS_2023` directory. Ignore the other directories.**_
+_**Note: When you clone this repository, you will only be using the `EarthScope InSAR_2023` directory. Ignore the other directories.**_
 
 There are two different ways of cloning a repository: You can clone by using `ssh` or using `https`.
 
@@ -237,13 +237,13 @@ This will also clone the `opensarlab-docker` repository to where you are current
 
 ---
 
-## **Move to the IRIS Directory**
+## **Move to the EarthScope InSAR Directory**
 ---
 
 Once you cloned your repository, run the following command to change into proper location:
 
 ```bash
-cd opensarlab-docker/Earthscope_IRIS_2023
+cd opensarlab-docker/Earthscope_InSAR_2023
 ```
 
 If you are in the right location, you should see a `Makefile`. You can verify this with the following command:
@@ -253,10 +253,10 @@ ls
 ```
 ---
 
-# **Running IRIS**
+# **Running EarthScope InSAR**
 ---
 
-This seciton will introduce users on how to use the `Docker` to properly run the IRIS deployment on their local computer.
+This seciton will introduce users on how to use the `Docker` to properly run the EarthScope InSAR deployment on their local computer.
 
 ---
 
@@ -285,14 +285,14 @@ Should display all images, including hidden ones, on to your terminal.
 If you never ran a Docker before, it should not display any images or containers. However, you should not see any error as this indicates that there was something wrong with initial installation process.
 
 
-We would also like to mention that when you are building a Docker image for the first time, it will take a long time, especially for big images like IRIS (30+ minutes).
+We would also like to mention that when you are building a Docker image for the first time, it will take a long time, especially for big images like EarthScope InSAR (30+ minutes).
 
-Running the image for a second time should be instant as long as you don't make any changes to the `iris/dockerfile`.
+Running the image for a second time should be instant as long as you don't make any changes to the `EarthScope InSAR/dockerfile`.
 
 ---
 
 
-### **Starting IRIS Deployment**
+### **Starting EarthScope InSAR Deployment**
 ---
 
 In your terminal, run the following command:
@@ -334,10 +334,10 @@ Note that we direct output to a log file
 
 
 ---
-## **IRIS Container**
+## **EarthScope InSAR Container**
 ---
 
-Now that you have your Docker container running, you can follow these steps to navigate through your IRIS deployment.
+Now that you have your Docker container running, you can follow these steps to navigate through your EarthScope InSAR deployment.
 
 ---
 
@@ -376,9 +376,9 @@ Now that you have your Docker container running, you can follow these steps to n
 
 # **Migrating from OSL to Docker**
 
-_**Note: This only applies to those who used the OSL version of IRIS deployment in the past.**_
+_**Note: This only applies to those who used the OSL version of EarthScope InSAR deployment in the past.**_
 
-Since the IRIS deployment on OpenSARLab will no longer be available, you can follow these steps to migrate the files you wish to save on to your computer. 
+Since the EarthScope InSAR deployment on OpenSARLab will no longer be available, you can follow these steps to migrate the files you wish to save on to your computer. 
 
 
 ---
@@ -390,13 +390,13 @@ First, you will need to compress the directories you want to be copied over to a
 1. Open up a terminal in the OSL, and make sure you are in the home directory. If you’re not sure, enter this command:
 
 ``` bash
-(iris) jupyter-username: ~> cd ~
+(earthscope_insar) jupyter-username: ~> cd ~
 ```
 
 2. Now that you’re in your home directory, let’s take all the directories you made throughout the SSBW and compress them into one, downloadable zip file. The command you need will look similar to the following:
 
 ``` bash
-(iris) jupyter-username: ~> zip -r OSLdata.zip directory1 directory2 directory3
+(earthscope_insar) jupyter-username: ~> zip -r OSLdata.zip directory1 directory2 directory3
 ```
 
 Where:
@@ -449,7 +449,7 @@ Now that you have a zipped file, you should be able to download them from OSL to
 
 Now that you have downloaded a copy of the `OSLdata.zip` file, you should move them to your Docker container.
 
-1. Move the `OSLdata.zip` file to the `/Volumes/IRIS/opensarlab-docker/Earthscope_IRIS_2023/virtual_home` directory.
+1. Move the `OSLdata.zip` file to the `/Volumes/EarthScope InSAR/opensarlab-docker/EarthScope InSAR_2023/virtual_home` directory.
 
 This directory is connected to the Docker container, so any files you save there will also appear within your Docker. Likewise, any files you create within the Docker will appear in that directory.
 
@@ -463,12 +463,12 @@ See below image for more detail:
 Lastly, you will need to unzip the `OSLdata.zip` file that is located in your Docker container.
 
 1. Once the `OSLdata.zip` file is in the `virtual_home` directory, open the terminal on the Docker container.
-2. If the IRIS Dockerfile is not running already, follow the directions above to run the Docker. 
+2. If the EarthScope InSAR Dockerfile is not running already, follow the directions above to run the Docker. 
 3. Open a terminal in the Docker as you have done with the OSL in the past.
 4. You should be in your home directory and if you type `ls` you should see the `OSLdata.zip` file. 
 5. Run following command to unzip your file:
 ``` bash
-(iris) jovyan@username:~$ unzip OSLdata.zip
+(earthscope_insar) jovyan@username:~$ unzip OSLdata.zip
 ```
 
 
@@ -575,24 +575,7 @@ Alternatively, if you would like to clone using the ssh method, which is the rec
 When you try to run `make` command, you may see errors like this:
 
 ```bash
-cd iris && bash build.sh 2>&1 | tee log
-+ IMAGE_NAME=iris2023
-+ '[' -e download.sh ']'
-+ bash download.sh
-Cloning into 'TRAIN'...
-warning: unable to access '/Users/<username>/.config/git/attributes': Permission denied
-+ cp dockerfile dockerfile.build
-++ date +%F-%H-%M-%S
-+ BUILD_TAG=2022-08-29-12-41-22
-++ git rev-parse --short HEAD
-+ COMMIT_HEAD=5437e1d
-+ docker build -f dockerfile.build --target testing .
-Cannot connect to the Docker daemon at unix:///var/run/docker.sock. Is the docker daemon running?
-bash start_container.sh 2>&1 | tee log
-++ pwd
-+ docker run -it --init --rm -p 8888:8888 -v /Volumes/IRIS/opensarlab-docker/iris2023/virtual_home:/home/jovyan iris2023:latest
 docker: Cannot connect to the Docker daemon at unix:///var/run/docker.sock. Is the docker daemon running?.
-See 'docker run --help'.
 ```
 
 _Solution:_
@@ -616,4 +599,4 @@ _Solution:_
 ## **If You Encounter Issues**
 ---
 - Please reach out for support
-- Support contact: uaf-jupyterhub-asf+IRIS2023@alaska.edu
+- Support contact: uaf-jupyterhub-asf+EarthScopeInSAR2023@alaska.edu
