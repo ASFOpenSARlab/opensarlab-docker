@@ -1,0 +1,172 @@
+FROM jupyter/base-notebook:ubuntu-20.04 as release
+
+
+# Base Stage ****************************************************************
+USER root
+WORKDIR /
+
+RUN set -ve
+
+RUN apt update && \
+    apt install --no-install-recommends -y \
+        software-properties-common \
+        git && \
+    apt-get install -y gpg-agent && \
+    add-apt-repository -y ppa:ubuntugis/ubuntugis-unstable && \
+    apt update && \
+    apt upgrade -y
+
+COPY tests/* /tests/
+
+RUN apt install -y \
+    proj-bin \
+    geotiff-bin \
+    libshp-dev \
+    libshp2 \
+    libhdf5-dev \
+    libnetcdf-dev \
+    libgdal-dev \
+    libgsl-dev
+
+# Install general items. If a library is needed for a specific piece of software, put it with that software.
+RUN apt update && \
+    apt install --fix-missing --no-install-recommends -y \
+        zip \
+        unzip \
+        wget \
+        vim \
+        rsync \
+        less \
+        snaphu \
+        curl \
+        openssh-client \
+        libgl1-mesa-glx \
+        emacs \
+        gnupg2 \
+        jq \
+        gfortran
+
+
+# Install texlive for PDF exporting of notebooks containing LaTex
+RUN apt install texlive-xetex texlive-fonts-recommended texlive-plain-generic -y
+
+# Update conda and mamba: this breaks things in the hook, need to play with it more
+# Updating just conda and mamba will auto-remove pip, so force pip to update to remain
+#RUN mamba update -n base -y conda mamba pip
+
+RUN mamba install -c conda-forge -y "conda==23.1.0" "mamba==1.3.1" "pip"
+
+RUN mamba install -c conda-forge -y awscli boto3 pyyaml bokeh plotly 'pyopenssl>=23.0.0'
+
+# Install jupyter libaries
+RUN mamba install -c conda-forge -y jupyter_contrib_nbextensions jupyter-resource-usage nb_conda_kernels jupyterlab-spellchecker ipympl kernda "jupyterlab_widgets<2.0.0" "ipywidgets<8.0.0"
+
+#install dask libraries
+RUN mamba install -c conda-forge -y dask-gateway dask distributed
+
+# Install OpenSARlab's widgets and extensions
+RUN python -m pip install \
+    url-widget \
+    #opensarlab-profile-label==0.1.2 \
+    #opensarlab-doc-link==0.1.0 \
+    #opensarlab_controlbtn==1.0.1 \
+    #opensarlab-notifications==1.0.2 \
+    opensarlab-theme-light==0.1.1 \
+    --
+
+####################################### PyGMTSAR #######################################
+RUN apt install -y --no-install-recommends \
+    csh \
+    autoconf \
+    make \ 
+    libtiff5-dev \ 
+    liblapack-dev \
+    libgmt-dev \
+    gmt-dcw \
+    gmt-gshhg \
+    gmt &&\
+    python3 -m pip install pygmtsar
+
+RUN mkdir -p /tmp/build && \
+    mkdir -p /usr/local/GMTSAR && \
+    git clone --branch master https://github.com/gmtsar/gmtsar /tmp/build/GMTSAR &&\
+    cd /tmp/build/GMTSAR &&\
+    autoconf &&\
+    ./configure --with-orbits-dir=/tmp CFLAGS='-z muldefs' LDFLAGS='-z muldefs'  && \
+    make &&\
+    make install &&\
+    mv -v /tmp/build/GMTSAR/bin /usr/local/GMTSAR/bin && \
+    rm -rf /tmp/build
+
+ENV PATH=/usr/local/GMTSAR/bin:$PATH
+##################################### END PyGMTSAR #####################################
+
+# Make sure that any files in the home directory are jovyan permission
+RUN chown -R jovyan:users $HOME/
+
+# Add sudo group user 599 elevation
+RUN addgroup -gid 599 elevation \
+    && echo '%elevation ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers
+
+# Clean up a few other things at the end
+RUN apt update && \
+    rm -rf /var/lib/apt/lists/* && \
+    apt autoremove -y && \
+    conda clean --yes --all
+
+# Make sure mamba (within conda) has write access
+RUN chmod -R 777 /opt/conda/pkgs/
+
+# Use the kernel display name `base` for the base conda environment
+RUN conda run -n base kernda --display-name base -o /opt/conda/share/jupyter/kernels/python3/kernel.json
+
+# Set the default theme to opensarlab-theme-light to avoid issues with built-in light theme and status bar
+# Remove the logout option from the main menu to steer users to the hub control panel
+# Remove the launch classic notebook option to avoid broken classic terminals and image loading errors
+RUN SETTINGS=/opt/conda/share/jupyter/lab/settings && \
+    mkdir -p $SETTINGS && \
+    OVERRIDES=$SETTINGS/overrides.json && \
+    TEMP=$SETTINGS/temp && \
+    echo '{"@jupyterlab/apputils-extension:themes": {"theme": "opensarlab-theme-light"}}' > $OVERRIDES && \
+    jq '. += {"@jupyterlab/mainmenu-extension:plugin": {"menus": [{"id": "jp-mainmenu-file", "items": [{"command": "hub:logout", "disabled": true}]}]}}' $OVERRIDES > $TEMP && \
+    jq '.["@jupyterlab/mainmenu-extension:plugin"].menus[1] |= {"id": "jp-mainmenu-help", "items": [{"command": "help:launch-classic-notebook", "disabled": true}]}' $TEMP > $OVERRIDES && \
+    jq '. += {"jupyterlab-topbar-extension:plugin": {"order": ["spacer", "opensarlab_profile_label", "doc_link", "server-btn"]}}' $OVERRIDES > $TEMP && \
+    mv $TEMP $OVERRIDES
+
+RUN rm -rf /home/jovyan/..?* /home/jovyan/.[!.]* /home/jovyan/*
+WORKDIR /home/jovyan
+RUN conda init
+
+# Addtional environment
+COPY env /etc/env
+RUN chmod -R 755 /etc/env && \
+    chown -R jovyan:users /etc/env
+
+RUN mkdir /aria
+
+RUN wget https://raw.githubusercontent.com/ASFOpenSARlab/opensarlab-envs/main/Environment_Configs/earthscope_insar_env.yml -P /etc/env/ && \
+    mv /etc/env/earthscope_insar_env.yml /etc/env/earthscope_insar.yaml && \
+    mamba env create -f /etc/env/earthscope_insar.yaml && \
+    mamba run -n earthscope_insar kernda -o --display-name earthscope_insar /opt/conda/envs/earthscope_insar/share/jupyter/kernels/python3/kernel.json && \
+    source /etc/env/earthscope_insar_env.sh && \
+    mamba clean --yes --all && \
+    chmod -R 755 /opt/conda/envs && \
+    chown -R jovyan:users /opt/conda/envs
+
+
+# Copy singleuser
+COPY singleuser /etc/singleuser
+
+
+# Copy entrypoint and cmd 
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod 755 /entrypoint.sh
+COPY --chown=1000:100 cmd.sh /cmd.sh
+RUN chmod 755 /cmd.sh
+
+ENTRYPOINT ["/entrypoint.sh"]
+CMD ["/cmd.sh"]
+
+FROM release as testing 
+
+RUN bash /tests/earthscope_insar.sh
