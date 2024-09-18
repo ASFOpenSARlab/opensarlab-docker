@@ -1,0 +1,44 @@
+{% extends "original_tree.html" %}
+{# This template assumes that the original tree.html is renamed original_tree.html #}
+
+{% block script %}
+    {{ super() }}
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.css" rel="stylesheet"/>
+    <script type="text/javascript">
+
+        require.config({paths: {toastr: "https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min"}});
+
+        require([
+            'jquery',
+            'toastr'
+        ], function ($, toastr) {
+
+            toastr.options = {
+                "closeButton": true,
+                "newestOnTop": true,
+                "progressBar": true,
+                "positionClass": "toast-top-right",
+                "preventDuplicates": false,
+                "onclick": null,
+                "showDuration": "30",
+                "hideDuration": "10",
+                "timeOut": "0",
+                "extendedTimeOut": "0",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            }
+
+            fetch(window.location.origin + '/user/notifications/{{ LAB_SHORT_NAME }}?profile={{ PROFILE_NAME }}' )
+                .then( response => response.json() )
+                .then( notes => {
+                    console.log(notes)
+                    notes.forEach( entry => toastr[entry['type']](entry['message'], entry['title']))
+                })
+                .catch( error => console.log(error) )
+            }
+        )
+    </script>
+{% endblock %}

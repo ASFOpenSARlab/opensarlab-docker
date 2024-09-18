@@ -1,0 +1,12 @@
+This file is a flag. Its existence indicates that the $HOME/.local/share/jupyter/kernels has
+been renamed to $HOME/.local/share/jupyter/kernels_old.
+
+This was done to avoid conflicting kernel.json files
+
+This renaming occurs at OpenSARlab server startup only if this file does not exist at the path:
+$HOME/.jupyter/old_kernels_flag.txt
+
+If you would like to restore your $HOME/.local/share/jupyter/kernels directory, rename it but leave this file untouched:
+mv $HOME/.local/share/jupyter/kernels_old $HOME/.local/share/jupyter/kernels
+
+It will not be renamed again unless this file is deleted.
